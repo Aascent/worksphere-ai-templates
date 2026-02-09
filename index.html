@@ -31,6 +31,9 @@
             --status-approved-text: #FFFFFF;
             --status-pending-bg: #1FB5FF;
             --status-pending-text: #FFFFFF;
+            --status-waiting-bg: #F59E0B;
+            /* Amber for waiting */
+            --status-waiting-text: #FFFFFF;
             --badge-date-border: #8D321F;
         }
 
@@ -242,6 +245,13 @@
         .badge-available {
             background: var(--status-pending-bg);
             color: var(--status-pending-text);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+        }
+
+        .badge-waiting {
+            background: var(--status-waiting-bg);
+            color: var(--status-waiting-text);
             padding: 0.5rem 1rem;
             border-radius: 50px;
         }
@@ -526,7 +536,7 @@
                 <thead>
                     <tr>
                         <th class="ps-4">Asset Details</th>
-                        <th>Category</th>
+                        <th>Purchase Date</th>
                         <th>Serial No.</th>
                         <th>Status</th>
                         <th>Assigned To</th>
@@ -557,7 +567,11 @@
                         <td class="font-monospace text-muted">
                             <span class="badge-date">16/07/2020</span>
                         </td>
-                        <td><span class="badge badge-allocated">Allocated</span></td>
+                        <td class="font-monospace small text-muted">CND026CQNP</td>
+                        <td>
+                            <span class="badge badge-allocated">Allocated</span>
+                            <i class="bi bi-check-all text-success ms-1" title="Confirmed by Employee"></i>
+                        </td>
                         <td>
                             <div class="d-flex align-items-center">
                                 <div class="bg-primary text-white rounded-circle small me-2 d-flex align-items-center justify-content-center"
@@ -591,6 +605,7 @@
                         <td class="font-monospace text-muted">
                             <span class="badge-date">01/12/2023</span>
                         </td>
+                        <td class="font-monospace small text-muted">5CD7317YGO</td>
                         <td><span class="badge badge-available">Available</span></td>
                         <td class="text-muted small"><em>In Inventory</em></td>
                         <td class="text-end pe-4 text-muted small">1 week ago</td>
@@ -598,7 +613,7 @@
 
                     <tr onclick="openDrawer({
                         title: 'Dell Inspiron 15',
-                        status: 'Allocated',
+                        status: 'Pending Ack.',
                         serial: 'DH9YGJ3',
                         empName: 'Hetal Lathigara',
                         empId: 'AI-008',
@@ -619,7 +634,12 @@
                         <td class="font-monospace text-muted">
                             <span class="badge-date">24/01/2025</span>
                         </td>
-                        <td><span class="badge badge-allocated">Allocated</span></td>
+                        <td class="font-monospace small text-muted">DH9YGJ3</td>
+                        <td>
+                            <span class="badge badge-waiting">Pending Ack.</span>
+                            <i class="bi bi-envelope-exclamation-fill text-warning ms-1"
+                                title="Awaiting Employee Confirmation"></i>
+                        </td>
                         <td>
                             <div class="d-flex align-items-center">
                                 <div class="bg-warning text-white rounded-circle small me-2 d-flex align-items-center justify-content-center"
@@ -839,9 +859,13 @@
             const actionBtn = document.getElementById('btn-action');
 
             if (data.status === 'Allocated') {
-                badgeContainer.innerHTML = '<span class="badge badge-allocated fs-6">Allocated</span>';
+                badgeContainer.innerHTML = '<span class="badge badge-allocated fs-6">Allocated</span> <i class="bi bi-patch-check-fill text-white ms-1" style="font-size: 0.8rem;"></i>';
                 actionBtn.innerHTML = '<i class="bi bi-box-arrow-in-down me-2"></i> Return Asset';
                 actionBtn.className = 'btn btn-outline-danger w-100';
+            } else if (data.status === 'Pending Ack.') {
+                badgeContainer.innerHTML = '<span class="badge badge-waiting fs-6">Pending Acknowledgement</span>';
+                actionBtn.innerHTML = '<i class="bi bi-envelope-paper me-2"></i> Resend Email';
+                actionBtn.className = 'btn btn-warning w-100 text-white';
             } else {
                 badgeContainer.innerHTML = '<span class="badge badge-available fs-6">Available</span>';
                 actionBtn.innerHTML = '<i class="bi bi-person-plus me-2"></i> Assign to Employee';
