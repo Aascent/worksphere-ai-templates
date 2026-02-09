@@ -352,17 +352,73 @@
         }
 
         .badge-warranty-near {
-            background: #FEF3C7;
-            color: #92400E;
-            font-size: 0.65rem;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: 700;
+            background: #FFFBEB;
+            color: #B45309;
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-weight: 600;
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            border: 1px solid #F59E0B;
+            gap: 6px;
+            border: 1px solid #FDE68A;
+            margin-top: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .badge-warranty-near:hover {
+            background: #FEF3C7;
+            transform: translateY(-1px);
+        }
+
+        .warranty-progress-container {
+            height: 8px;
+            background: #E5E7EB;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .warranty-progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease-out;
+        }
+
+        .warranty-status-text {
+            font-size: 0.75rem;
+            font-weight: 600;
             margin-top: 4px;
+        }
+
+        .kpi-card.interactive {
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card.interactive:active {
+            transform: scale(0.98);
+        }
+
+        .kpi-card.interactive::after {
+            content: 'Click to filter';
+            position: absolute;
+            bottom: 0px;
+            left: 0;
+            right: 0;
+            background: rgba(180, 83, 9, 0.05);
+            font-size: 0.65rem;
+            text-align: center;
+            padding: 2px 0;
+            color: #B45309;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .kpi-card.interactive:hover::after {
+            opacity: 1;
         }
 
         /* --- Avatars & Entities --- */
@@ -709,7 +765,8 @@
             </div>
             <!-- Warranty Expiry -->
             <div class="col-xl col-lg-12 col-md-12">
-                <div class="kpi-card h-100 border-warning border-opacity-50" style="background: #FFFBEB;">
+                <div class="kpi-card h-100 border-warning border-opacity-50 interactive" style="background: #FFFBEB;"
+                    onclick="filterByWarranty()">
                     <div class="d-flex justify-content-between">
                         <div>
                             <p class="text-warning text-uppercase small fw-bold mb-1">Warranty Watch (30d)</p>
@@ -1115,9 +1172,24 @@
                     </div>
                 </div>
             </div>
-            <div class="spec-item mt-2">
-                <span class="spec-label">Warranty Expiry</span>
-                <span class="spec-value small fw-bold text-danger" id="d-warranty-date">--</span>
+            <div class="spec-item mt-3">
+                <div class="d-flex justify-content-between">
+                    <span class="spec-label">Warranty Status</span>
+                    <span class="warranty-status-text" id="d-warranty-label">--</span>
+                </div>
+                <div class="warranty-progress-container">
+                    <div class="warranty-progress-bar" id="d-warranty-progress" style="width: 0%;"></div>
+                </div>
+                <div class="d-flex justify-content-between x-small text-muted mt-1" style="font-size: 0.7rem;">
+                    <span>Expires: <span id="d-warranty-date">--</span></span>
+                    <span id="d-warranty-days">-- days left</span>
+                </div>
+            </div>
+
+            <div class="d-grid mt-3">
+                <button class="btn btn-sm btn-light border text-muted" style="font-size: 0.75rem;">
+                    <i class="bi bi-file-earmark-text me-1"></i> View Warranty Invoice
+                </button>
             </div>
             <div class="spec-item mt-2">
                 <span class="spec-label">Other Assets</span>
@@ -1433,7 +1505,35 @@
             document.getElementById('d-otg').textContent = data.otg || 'N/A';
             document.getElementById('d-charger').textContent = data.charger || 'N/A';
             document.getElementById('d-others').textContent = data.others || 'N/A';
-            document.getElementById('d-warranty-date').textContent = data.warranty || 'N/A';
+
+            // Advance Warranty UI Logic
+            const warrantyDate = data.warranty || 'N/A';
+            document.getElementById('d-warranty-date').textContent = warrantyDate;
+
+            const progress = document.getElementById('d-warranty-progress');
+            const label = document.getElementById('d-warranty-label');
+            const daysText = document.getElementById('d-warranty-days');
+
+            // Mock calculations for demonstration
+            if (warrantyDate.includes('2025')) {
+                progress.style.width = '85%';
+                progress.style.background = '#F59E0B'; // Orange
+                label.textContent = 'Expiring Soon';
+                label.style.color = '#B45309';
+                daysText.textContent = '42 days remaining';
+            } else if (warrantyDate.includes('2026') || warrantyDate.includes('2027')) {
+                progress.style.width = '100%';
+                progress.style.background = '#10B981'; // Green
+                label.textContent = 'Active';
+                label.style.color = '#059669';
+                daysText.textContent = '300+ days remaining';
+            } else {
+                progress.style.width = '20%';
+                progress.style.background = '#EF4444'; // Red
+                label.textContent = 'Expired';
+                label.style.color = '#B91C1C';
+                daysText.textContent = 'Warranty Over';
+            }
 
             // Handle Status Badge & Button Text
             const badgeContainer = document.getElementById('d-status-badge');
@@ -1546,6 +1646,20 @@
                 techDetails.style.display = 'block';
                 divConnector.style.display = 'block';
             }
+        }
+
+        function filterByWarranty() {
+            // One-click filter to show only expiring assets
+            const rows = document.querySelectorAll('.asset-row');
+            rows.forEach(row => {
+                if (row.querySelector('.badge-warranty-near')) {
+                    row.style.display = '';
+                    row.classList.add('highlight-warranty');
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            showToast("Showing assets with expiring warranties");
         }
 
         // Run once on load to set initial state
