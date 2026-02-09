@@ -550,9 +550,13 @@
                         serial: 'CND026CQNP',
                         empName: 'Sachin Modh',
                         empId: 'AI-002',
-                        specs: 'Intel Core i5-1035G1, 16GB RAM, 1TB SSD',
-                        os: 'Windows 11 Home Single Language',
-                        date: '16-07-2020'
+                        specs: 'Intel Core i5-1035G1, 16.0 GB RAM',
+                        os: 'Windows 11 Home',
+                        date: '16-07-2020',
+                        mouse: '2237LZD2J518 (Logitech)',
+                        headphone: '131000158 (Sennheiser)',
+                        charger: 'WHHRHA1RDST34',
+                        others: 'Laptop Bag, Mouse Pad'
                     })">
                         <td class="ps-4">
                             <div class="d-flex align-items-center">
@@ -583,6 +587,91 @@
                     </tr>
 
                     <tr onclick="openDrawer({
+                        title: 'Dell Inspiron 15 300',
+                        status: 'Pending Ack.',
+                        serial: '4G2LYR3',
+                        empName: 'Nayan Patel',
+                        empId: '(New Joiner)',
+                        specs: '11th Gen Intel i5-1135G7, 16.0 GB RAM',
+                        os: 'Windows 11 [24H2]',
+                        date: '24-11-2025',
+                        mouse: 'Wireless Mouse (Included)',
+                        headphone: 'N/A',
+                        charger: 'P112F301 (Reg Model)',
+                        others: 'Laptop Bag'
+                    })">
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded p-2 me-3 text-primary"><i class="bi bi-laptop fs-5"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold">Dell Inspiron 15</div>
+                                    <div class="small text-muted">ID: AST-892</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="font-monospace text-muted">
+                            <span class="badge-date">24/11/2025</span>
+                        </td>
+                        <td class="font-monospace small text-muted">4G2LYR3</td>
+                        <td>
+                            <span class="badge badge-waiting">Pending Ack.</span>
+                            <i class="bi bi-envelope-exclamation-fill text-warning ms-1"
+                                title="Awaiting Employee Confirmation"></i>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-warning text-white rounded-circle small me-2 d-flex align-items-center justify-content-center"
+                                    style="width:24px;height:24px;">NP</div>
+                                Nayan Patel
+                            </div>
+                        </td>
+                        <td class="text-end pe-4 text-muted small">Just now</td>
+                    </tr>
+
+                    <tr onclick="openDrawer({
+                        title: 'Mac Mini Box (MGNR3HNIA)',
+                        status: 'Allocated',
+                        serial: 'C07G1LGQ6NV',
+                        empName: 'Yash Vithalani',
+                        empId: 'ARI-14',
+                        specs: 'Apple M1, 8 GB RAM',
+                        os: 'macOS Monterey',
+                        date: '18-04-2023',
+                        mouse: 'N/A',
+                        headphone: 'N/A',
+                        charger: 'ADS-26FSG-12',
+                        others: 'LG Monitor, HDMI Cable'
+                    })">
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded p-2 me-3 text-primary"><i class="bi bi-cpu fs-5"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold">Mac Mini Box</div>
+                                    <div class="small text-muted">ID: AST-104</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="font-monospace text-muted">
+                            <span class="badge-date">18/04/2023</span>
+                        </td>
+                        <td class="font-monospace small text-muted">C07G1LGQ6NV</td>
+                        <td>
+                            <span class="badge badge-allocated">Allocated</span>
+                            <i class="bi bi-check-all text-success ms-1" title="Confirmed by Employee"></i>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-indigo text-white rounded-circle small me-2 d-flex align-items-center justify-content-center"
+                                    style="width:24px;height:24px; background-color: #4F46E5;">YV</div>
+                                Yash Vithalani
+                            </div>
+                        </td>
+                        <td class="text-end pe-4 text-muted small">3 weeks ago</td>
+                    </tr>
+
+                    <tr onclick="openDrawer({
                         title: 'HP Pavillion Power',
                         status: 'Available',
                         serial: '5CD7317YGO',
@@ -590,7 +679,11 @@
                         empId: 'N/A',
                         specs: 'Intel Core i5-1135G7, 8GB RAM',
                         os: 'Windows 11 Home',
-                        date: 'N/A'
+                        date: 'N/A',
+                        mouse: 'N/A',
+                        headphone: 'N/A',
+                        charger: 'N/A',
+                        others: 'N/A'
                     })">
                         <td class="ps-4">
                             <div class="d-flex align-items-center">
@@ -607,47 +700,15 @@
                         </td>
                         <td class="font-monospace small text-muted">5CD7317YGO</td>
                         <td><span class="badge badge-available">Available</span></td>
-                        <td class="text-muted small"><em>In Inventory</em></td>
+                        <td>
+                            <div class="d-flex align-items-center text-muted small">
+                                <div class="bg-light rounded-circle me-2 d-flex align-items-center justify-content-center border"
+                                    style="width:24px;height:24px;"><i class="bi bi-box-seam"
+                                        style="font-size: 0.7rem;"></i></div>
+                                <span>Unassigned</span>
+                            </div>
+                        </td>
                         <td class="text-end pe-4 text-muted small">1 week ago</td>
-                    </tr>
-
-                    <tr onclick="openDrawer({
-                        title: 'Dell Inspiron 15',
-                        status: 'Pending Ack.',
-                        serial: 'DH9YGJ3',
-                        empName: 'Hetal Lathigara',
-                        empId: 'AI-008',
-                        specs: 'i5-1135G7, 24GB RAM',
-                        os: 'Windows 11 Pro',
-                        date: '24-01-2025'
-                    })">
-                        <td class="ps-4">
-                            <div class="d-flex align-items-center">
-                                <div class="bg-light rounded p-2 me-3 text-primary"><i class="bi bi-laptop fs-5"></i>
-                                </div>
-                                <div>
-                                    <div class="fw-bold">Dell Inspiron 15</div>
-                                    <div class="small text-muted">ID: AST-892</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="font-monospace text-muted">
-                            <span class="badge-date">24/01/2025</span>
-                        </td>
-                        <td class="font-monospace small text-muted">DH9YGJ3</td>
-                        <td>
-                            <span class="badge badge-waiting">Pending Ack.</span>
-                            <i class="bi bi-envelope-exclamation-fill text-warning ms-1"
-                                title="Awaiting Employee Confirmation"></i>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="bg-warning text-white rounded-circle small me-2 d-flex align-items-center justify-content-center"
-                                    style="width:24px;height:24px;">HL</div>
-                                Hetal Lathigara
-                            </div>
-                        </td>
-                        <td class="text-end pe-4 text-muted small">1 day ago</td>
                     </tr>
                 </tbody>
             </table>
@@ -688,6 +749,24 @@
             <div class="spec-item">
                 <span class="spec-label">Processor/RAM</span>
                 <span class="spec-value" id="d-specs">--</span>
+            </div>
+
+            <h6 class="text-uppercase text-muted fw-bold small mb-3 mt-4">Peripherals & Accessories</h6>
+            <div class="spec-item">
+                <span class="spec-label">Mouse S/N</span>
+                <span class="spec-value small" id="d-mouse">--</span>
+            </div>
+            <div class="spec-item">
+                <span class="spec-label">Headphone S/N</span>
+                <span class="spec-value small" id="d-headphone">--</span>
+            </div>
+            <div class="spec-item">
+                <span class="spec-label">Charger/Adapter</span>
+                <span class="spec-value small" id="d-charger">--</span>
+            </div>
+            <div class="spec-item">
+                <span class="spec-label">Other Assets</span>
+                <span class="spec-value small" id="d-others">--</span>
             </div>
 
             <h6 class="text-uppercase text-muted fw-bold small mb-3 mt-4">Current Assignment</h6>
@@ -853,6 +932,12 @@
             document.getElementById('d-empName').textContent = data.empName;
             document.getElementById('d-empId').textContent = data.empId;
             document.getElementById('d-date').textContent = data.date;
+
+            // New Fields
+            document.getElementById('d-mouse').textContent = data.mouse || 'N/A';
+            document.getElementById('d-headphone').textContent = data.headphone || 'N/A';
+            document.getElementById('d-charger').textContent = data.charger || 'N/A';
+            document.getElementById('d-others').textContent = data.others || 'N/A';
 
             // Handle Status Badge & Button Text
             const badgeContainer = document.getElementById('d-status-badge');
