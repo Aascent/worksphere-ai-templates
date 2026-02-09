@@ -272,11 +272,18 @@
             margin-bottom: 0.5rem;
         }
 
-        .form-control,
-        .form-select {
+        .form-control {
             border-radius: 8px;
             border: 1px solid #D1D5DB;
             padding: 0.625rem 0.875rem;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .form-select {
+            border-radius: 8px;
+            border: 1px solid #D1D5DB;
+            padding: 0.625rem 2.5rem 0.625rem 0.875rem;
             font-size: 0.875rem;
             transition: all 0.2s;
         }
@@ -409,12 +416,12 @@
                 <input type="text" class="form-control border-start-0 ps-0"
                     placeholder="Search serial, model, or employee...">
             </div>
-            <select class="form-select w-auto text-muted">
+            <select class="form-select w-auto text-muted" style="min-width: 180px;">
                 <option>Filter by Category</option>
                 <option>Laptops</option>
                 <option>Accessories</option>
             </select>
-            <select class="form-select w-auto text-muted">
+            <select class="form-select w-auto text-muted" style="min-width: 160px;">
                 <option>Filter by Status</option>
                 <option>Allocated</option>
                 <option>Available</option>
@@ -583,18 +590,20 @@
             </div>
 
             <h6 class="text-uppercase text-muted fw-bold small mb-3 mt-4">Activity Log</h6>
-            <div class="border-start border-2 ps-3 ms-2">
-                <div class="mb-3 position-relative">
-                    <div class="position-absolute bg-white text-primary" style="left:-21px; top:2px;"><i
-                            class="bi bi-dot fs-3"></i></div>
-                    <p class="small mb-0 fw-bold">System Check Passed</p>
-                    <p class="text-muted small" style="font-size: 0.75rem;">Today, 10:23 AM</p>
+            <div class="border-start border-2 ps-4 ms-2" style="border-color: #E5E7EB !important;">
+                <div class="mb-4 position-relative">
+                    <div class="position-absolute bg-white"
+                        style="left: -33px; top: 0; width: 14px; height: 14px; border-radius: 50%; border: 3px solid var(--primary); z-index: 1;">
+                    </div>
+                    <p class="small mb-0 fw-bold" style="line-height: 1.2;">System Check Passed</p>
+                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">Today, 10:23 AM</p>
                 </div>
-                <div class="mb-3 position-relative">
-                    <div class="position-absolute bg-white text-primary" style="left:-21px; top:2px;"><i
-                            class="bi bi-dot fs-3"></i></div>
-                    <p class="small mb-0 fw-bold">Asset Profile Updated</p>
-                    <p class="text-muted small" style="font-size: 0.75rem;">Yesterday, 4:00 PM</p>
+                <div class="mb-0 position-relative">
+                    <div class="position-absolute bg-white"
+                        style="left: -33px; top: 0; width: 14px; height: 14px; border-radius: 50%; border: 3px solid #cbd5e1; z-index: 1;">
+                    </div>
+                    <p class="small mb-0 fw-bold" style="line-height: 1.2;">Asset Profile Updated</p>
+                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">Yesterday, 4:00 PM</p>
                 </div>
             </div>
 
