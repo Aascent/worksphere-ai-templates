@@ -1104,6 +1104,19 @@
                                 <label class="form-label">Serial Number <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" placeholder="e.g. CND026CQNP" required>
                             </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Internal Asset Tag</label>
+                                <input type="text" class="form-control" placeholder="e.g. ASSET-2024-001">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Condition</label>
+                                <select class="form-select">
+                                    <option>New</option>
+                                    <option>Used / Good</option>
+                                    <option>Refurbished</option>
+                                    <option>Damaged (For Repair)</option>
+                                </select>
+                            </div>
                         </div>
 
                         <!-- Computing Specs (For Laptops/Desktops) -->
@@ -1117,11 +1130,18 @@
                                 <div class="col-md-6">
                                     <label class="form-label">RAM Config</label>
                                     <select class="form-select">
-                                        <option selected>8 GB</option>
-                                        <option>16 GB</option>
+                                        <option>8 GB</option>
+                                        <option selected>16 GB</option>
                                         <option>32 GB</option>
-                                        <option>64 GB</option>
                                     </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Primary Storage (SSD/HDD)</label>
+                                    <input type="text" class="form-control" placeholder="e.g. 512GB NVMe SSD">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Hostname / Device Name</label>
+                                    <input type="text" class="form-control" placeholder="e.g. IT-LAPTOP-05">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Operating System</label>
@@ -1130,6 +1150,29 @@
                                 <div class="col-md-6">
                                     <label class="form-label">OS Version</label>
                                     <input type="text" class="form-control" placeholder="e.g. 24H2">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mobile Specs -->
+                        <div id="section-mobile" class="dynamic-section" style="display: none;">
+                            <div class="form-section-title">Mobile Specifications</div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">IMEI 1 / Primary ID</label>
+                                    <input type="text" class="form-control" placeholder="15-digit IMEI number">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">IMEI 2 (Optional)</label>
+                                    <input type="text" class="form-control" placeholder="Secondary IMEI">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Storage Capacity</label>
+                                    <input type="text" class="form-control" placeholder="e.g. 128GB">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">OS version</label>
+                                    <input type="text" class="form-control" placeholder="e.g. iOS 17.5 / Android 14">
                                 </div>
                             </div>
                         </div>
@@ -1153,9 +1196,33 @@
                             </div>
                         </div>
 
+                        <!-- Technical Details (Generic for others) -->
+                        <div id="section-tech-details" class="dynamic-section" style="display: none;">
+                            <div class="form-section-title">Technical Details</div>
+                            <div class="row g-3">
+                                <div id="div-wattage" class="col-md-4" style="display: none;">
+                                    <label class="form-label">Wattage (W)</label>
+                                    <input type="text" class="form-control" placeholder="e.g. 65W, 30W">
+                                </div>
+                                <div id="div-connector" class="col-md-4" style="display: none;">
+                                    <label class="form-label">Connector Type</label>
+                                    <input type="text" class="form-control" placeholder="e.g. USB-C, HDMI, LAN">
+                                </div>
+                                <div id="div-connectivity" class="col-md-4" style="display: none;">
+                                    <label class="form-label">Connectivity</label>
+                                    <select class="form-select">
+                                        <option>Wired</option>
+                                        <option>Wireless (2.4GHz)</option>
+                                        <option>Bluetooth</option>
+                                        <option>Dual Mode</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Included Peripherals -->
                         <div id="section-peripherals" class="dynamic-section">
-                            <div class="form-section-title">Included Peripherals</div>
+                            <div class="form-section-title">Included Peripherals / Bundle</div>
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label class="form-label">Mouse Model/SN</label>
@@ -1198,6 +1265,11 @@
                                     <option>Allocated</option>
                                     <option>Under Repair</option>
                                 </select>
+                            </div>
+                            <div class="col-md-8">
+                                <label class="form-label">Vendor / Supplier</label>
+                                <input type="text" class="form-control"
+                                    placeholder="e.g. Amazon, Local IT Vendor, Direct Brand">
                             </div>
                         </div>
 
@@ -1331,24 +1403,38 @@
         function toggleFormFields() {
             const category = document.getElementById('assetCategory').value;
             const computing = document.getElementById('section-computing');
+            const mobile = document.getElementById('section-mobile');
             const monitor = document.getElementById('section-monitor');
+            const techDetails = document.getElementById('section-tech-details');
             const peripherals = document.getElementById('section-peripherals');
             const desktopOnly = document.getElementById('desktop-only-peripherals');
 
-            // Default State
-            computing.style.display = 'none';
-            monitor.style.display = 'none';
-            peripherals.style.display = 'none';
-            desktopOnly.style.display = 'none';
+            const divWattage = document.getElementById('div-wattage');
+            const divConnector = document.getElementById('div-connector');
+            const divConnectivity = document.getElementById('div-connectivity');
 
-            if (category === 'Laptop' || category === 'Desktop' || category === 'Mobile') {
+            // Default State
+            [computing, mobile, monitor, techDetails, peripherals, desktopOnly, divWattage, divConnector, divConnectivity].forEach(el => el.style.display = 'none');
+
+            if (category === 'Laptop' || category === 'Desktop') {
                 computing.style.display = 'block';
                 peripherals.style.display = 'block';
                 if (category === 'Desktop') desktopOnly.style.display = 'block';
+            } else if (category === 'Mobile') {
+                mobile.style.display = 'block';
+                peripherals.style.display = 'block';
             } else if (category === 'Monitor') {
                 monitor.style.display = 'block';
-            } else {
-                // Keep it basic for cables, bags, etc.
+            } else if (category === 'Peripheral') {
+                techDetails.style.display = 'block';
+                divConnectivity.style.display = 'block';
+            } else if (category === 'Power') {
+                techDetails.style.display = 'block';
+                divWattage.style.display = 'block';
+                divConnector.style.display = 'block';
+            } else if (category === 'Cable') {
+                techDetails.style.display = 'block';
+                divConnector.style.display = 'block';
             }
         }
 
