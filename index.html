@@ -235,10 +235,57 @@
             font-family: 'JetBrains Mono', 'Roboto Mono', monospace;
             font-size: 0.75rem;
             background: #f1f5f9;
-            padding: 4px 8px;
+            padding: 4px 10px;
             border-radius: 4px;
             color: #475569;
             border: 1px solid #e2e8f0;
+            cursor: copy;
+            transition: all 0.2s;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .serial-tag:hover {
+            background: #e2e8f0;
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .serial-tag::after {
+            content: '\F2E3';
+            /* Bootstrap Icon: bi-clipboard */
+            font-family: "bootstrap-icons";
+            font-size: 0.7rem;
+            opacity: 0.4;
+        }
+
+        .serial-tag:hover::after {
+            opacity: 1;
+        }
+
+        .copy-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1e293b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            z-index: 9999;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .copy-toast.show {
+            transform: translateX(-50%) translateY(0);
         }
 
         .specs-snippet {
@@ -665,7 +712,7 @@
                             <span class="badge-date">16/07/2020</span>
                         </td>
                         <td class="font-monospace small text-muted">
-                            <span class="serial-tag">CND026CQNP</span>
+                            <span class="serial-tag" onclick="copyToClipboard('CND026CQNP', event)">CND026CQNP</span>
                         </td>
                         <td>
                             <span class="badge badge-allocated">Allocated</span>
@@ -718,7 +765,7 @@
                             <span class="badge-date">24/11/2025</span>
                         </td>
                         <td class="font-monospace small text-muted">
-                            <span class="serial-tag">4G2LYR3</span>
+                            <span class="serial-tag" onclick="copyToClipboard('4G2LYR3', event)">4G2LYR3</span>
                         </td>
                         <td>
                             <span class="badge badge-waiting">Pending Ack.</span>
@@ -771,7 +818,7 @@
                             <span class="badge-date">18/04/2023</span>
                         </td>
                         <td class="font-monospace small text-muted">
-                            <span class="serial-tag">C07G1LGQ6NV</span>
+                            <span class="serial-tag" onclick="copyToClipboard('C07G1LGQ6NV', event)">C07G1LGQ6NV</span>
                         </td>
                         <td>
                             <span class="badge badge-allocated">Allocated</span>
@@ -823,7 +870,7 @@
                             <span class="badge-date">12/05/2021</span>
                         </td>
                         <td class="font-monospace small text-muted">
-                            <span class="serial-tag">CND1504BR9</span>
+                            <span class="serial-tag" onclick="copyToClipboard('CND1504BR9', event)">CND1504BR9</span>
                         </td>
                         <td>
                             <span class="badge badge-allocated">Allocated</span>
@@ -874,7 +921,7 @@
                             <span class="badge-date">01/12/2023</span>
                         </td>
                         <td class="font-monospace small text-muted">
-                            <span class="serial-tag">5CD7317YGO</span>
+                            <span class="serial-tag" onclick="copyToClipboard('5CD7317YGO', event)">5CD7317YGO</span>
                         </td>
                         <td><span class="badge badge-available">Available</span></td>
                         <td>
@@ -917,7 +964,8 @@
             <h6 class="text-uppercase text-muted fw-bold small mb-3">Technical Specifications</h6>
             <div class="spec-item">
                 <span class="spec-label">Serial Number</span>
-                <span class="spec-value font-monospace" id="d-serial">--</span>
+                <span class="spec-value serial-tag" id="d-serial"
+                    onclick="copyToClipboard(this.textContent, event)">--</span>
             </div>
             <div class="spec-item">
                 <span class="spec-label">Operating System</span>
@@ -1181,6 +1229,31 @@
                     row.style.display = 'none';
                 }
             });
+        }
+
+        function copyToClipboard(text, event) {
+            // Stop drawer from opening
+            if (event) event.stopPropagation();
+
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(`Serial ${text} copied to clipboard!`);
+            });
+        }
+
+        function showToast(message) {
+            let toast = document.getElementById('copyToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'copyToast';
+                toast.className = 'copy-toast';
+                document.body.appendChild(toast);
+            }
+            toast.innerHTML = `<i class="bi bi-check-circle-fill text-success"></i> ${message}`;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
         }
     </script>
 </body>
