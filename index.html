@@ -43,6 +43,27 @@
             --badge-date-border: #8D321F;
         }
 
+        /* Aggressive Scrollbar Hiding */
+        html,
+        body {
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            overflow: -moz-scrollbars-none;
+        }
+
+        html::-webkit-scrollbar,
+        body::-webkit-scrollbar,
+        .drawer::-webkit-scrollbar,
+        .table-container::-webkit-scrollbar,
+        *::-webkit-scrollbar {
+            display: none !important;
+            /* Chrome, Safari, Opera */
+            width: 0 !important;
+            height: 0 !important;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-body);
@@ -357,20 +378,37 @@
             border-radius: 50px;
         }
 
+        .badge-date {
+            background: #FFFFFF;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 2px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-flex;
+            justify-content: center;
+            min-width: 110px;
+            font-family: 'JetBrains Mono', 'Roboto Mono', monospace;
+        }
+
         .badge-warranty-near {
             background: #FFFBEB;
             color: #B45309;
-            font-size: 0.7rem;
-            padding: 4px 10px;
+            font-size: 0.65rem;
+            padding: 2px 8px;
             border-radius: 50px;
-            font-weight: 600;
+            font-weight: 700;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
+            gap: 4px;
             border: 1px solid #FDE68A;
-            margin-top: 6px;
+            margin-top: 5px;
             cursor: pointer;
             transition: all 0.2s;
+            min-width: 110px;
+            text-transform: uppercase;
         }
 
         .badge-warranty-near:hover {
@@ -486,14 +524,6 @@
             color: #6b21a8;
         }
 
-        .badge-date {
-            border: 1px solid var(--badge-date-border);
-            color: var(--primary);
-            padding: 0.25rem 0.75rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
 
         /* --- Slide-Over Drawer --- */
         .drawer-overlay {
@@ -947,10 +977,10 @@
                             </div>
                         </td>
                         <td>
-                            <div class="d-flex flex-column">
+                            <div class="d-flex flex-column align-items-center">
                                 <span class="badge-date">24/11/2025</span>
-                                <span class="badge-warranty-near"><i class="bi bi-clock-history"></i> Expiring
-                                    Soon</span>
+                                <span class="badge-warranty-near"><i class="bi bi-clock-history"></i> EXPIRING
+                                    SOON</span>
                             </div>
                         </td>
                         <td class="font-monospace small text-muted">
