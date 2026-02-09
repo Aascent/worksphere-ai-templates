@@ -799,7 +799,10 @@
                         os: 'macOS Monterey',
                         date: '18-04-2023',
                         mouse: 'N/A',
+                        keyboard: 'Apple Magic Keyboard (SN: 9812739)',
                         headphone: 'N/A',
+                        storage: 'Samsung T7 500GB SSD',
+                        otg: 'T-Type USB-C Hub (v3.0)',
                         charger: 'ADS-26FSG-12',
                         others: 'LG Monitor, HDMI Cable'
                     })">
@@ -977,19 +980,45 @@
             </div>
 
             <h6 class="text-uppercase text-muted fw-bold small mb-3 mt-4">Peripherals & Accessories</h6>
-            <div class="spec-item">
-                <span class="spec-label">Mouse S/N</span>
-                <span class="spec-value small" id="d-mouse">--</span>
+            <div class="row g-2">
+                <div class="col-6">
+                    <div class="spec-item h-100">
+                        <span class="spec-label">Mouse S/N</span>
+                        <span class="spec-value small" id="d-mouse">--</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="spec-item h-100">
+                        <span class="spec-label">Keyboard S/N</span>
+                        <span class="spec-value small" id="d-keyboard">--</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="spec-item h-100">
+                        <span class="spec-label">Headphones</span>
+                        <span class="spec-value small" id="d-headphone">--</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="spec-item h-100">
+                        <span class="spec-label">Storage (SSD/HDD)</span>
+                        <span class="spec-value small" id="d-storage">--</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="spec-item h-100">
+                        <span class="spec-label">Connectivity (OTG)</span>
+                        <span class="spec-value small" id="d-otg">--</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="spec-item h-100">
+                        <span class="spec-label">Charger/Adapter</span>
+                        <span class="spec-value small" id="d-charger">--</span>
+                    </div>
+                </div>
             </div>
-            <div class="spec-item">
-                <span class="spec-label">Headphone S/N</span>
-                <span class="spec-value small" id="d-headphone">--</span>
-            </div>
-            <div class="spec-item">
-                <span class="spec-label">Charger/Adapter</span>
-                <span class="spec-value small" id="d-charger">--</span>
-            </div>
-            <div class="spec-item">
+            <div class="spec-item mt-2">
                 <span class="spec-label">Other Assets</span>
                 <span class="spec-value small" id="d-others">--</span>
             </div>
@@ -1172,7 +1201,10 @@
 
             // New Fields
             document.getElementById('d-mouse').textContent = data.mouse || 'N/A';
+            document.getElementById('d-keyboard').textContent = data.keyboard || 'N/A';
             document.getElementById('d-headphone').textContent = data.headphone || 'N/A';
+            document.getElementById('d-storage').textContent = data.storage || 'N/A';
+            document.getElementById('d-otg').textContent = data.otg || 'N/A';
             document.getElementById('d-charger').textContent = data.charger || 'N/A';
             document.getElementById('d-others').textContent = data.others || 'N/A';
 
