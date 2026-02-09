@@ -1075,11 +1075,12 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Category</label>
-                                <select class="form-select">
-                                    <option selected>Laptop</option>
-                                    <option>Desktop</option>
-                                    <option>Monitor</option>
-                                    <option>Other</option>
+                                <select id="assetCategory" class="form-select" onchange="toggleFormFields()">
+                                    <option value="Laptop" selected>Laptop</option>
+                                    <option value="Desktop">Desktop</option>
+                                    <option value="Monitor">Monitor</option>
+                                    <option value="Accessory">Accessory/Peripheral</option>
+                                    <option value="Other">Other</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
@@ -1096,30 +1097,77 @@
                             </div>
                         </div>
 
-                        <!-- Specifications -->
-                        <div class="form-section-title">Specifications</div>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Processor (CPU)</label>
-                                <input type="text" class="form-control" placeholder="e.g. Intel Core i5-1035G1">
+                        <!-- Computing Specs (For Laptops/Desktops) -->
+                        <div id="section-computing" class="dynamic-section">
+                            <div class="form-section-title">Computing Specifications</div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Processor (CPU)</label>
+                                    <input type="text" class="form-control" placeholder="e.g. Intel Core i5-1135G7">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">RAM Config</label>
+                                    <select class="form-select">
+                                        <option selected>8 GB</option>
+                                        <option>16 GB</option>
+                                        <option>32 GB</option>
+                                        <option>64 GB</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Operating System</label>
+                                    <input type="text" class="form-control" placeholder="e.g. Windows 11 Pro">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">OS Version</label>
+                                    <input type="text" class="form-control" placeholder="e.g. 24H2">
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label">RAM Config</label>
-                                <select class="form-select">
-                                    <option selected>8 GB</option>
-                                    <option>16 GB</option>
-                                    <option>32 GB</option>
-                                    <option>64 GB</option>
-                                </select>
+                        </div>
+
+                        <!-- Monitor Specs -->
+                        <div id="section-monitor" class="dynamic-section" style="display: none;">
+                            <div class="form-section-title">Display Specifications</div>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">Screen Size</label>
+                                    <input type="text" class="form-control" placeholder="e.g. 24-inch">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Resolution</label>
+                                    <input type="text" class="form-control" placeholder="e.g. 1920 x 1080">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Panel Type</label>
+                                    <input type="text" class="form-control" placeholder="e.g. IPS, LED">
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Operating System</label>
-                                <input type="text" class="form-control"
-                                    placeholder="e.g. Windows 11 Home Single Language">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">OS Version</label>
-                                <input type="text" class="form-control" placeholder="e.g. 23H2 / Build 22631">
+                        </div>
+
+                        <!-- Included Peripherals -->
+                        <div id="section-peripherals" class="dynamic-section">
+                            <div class="form-section-title">Included Peripherals</div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Mouse Model/SN</label>
+                                    <input type="text" class="form-control" placeholder="Enter if included">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Charger Model/SN</label>
+                                    <input type="text" class="form-control" placeholder="Enter if included">
+                                </div>
+                                <div id="desktop-only-peripherals" style="display: none;" class="col-12 mt-0">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Keyboard Model/SN</label>
+                                            <input type="text" class="form-control" placeholder="Enter if included">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">USP/Hub Model</label>
+                                            <input type="text" class="form-control" placeholder="Enter if included">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -1271,6 +1319,35 @@
                 showToast(`Serial ${text} copied to clipboard!`);
             });
         }
+        function toggleFormFields() {
+            const category = document.getElementById('assetCategory').value;
+            const computing = document.getElementById('section-computing');
+            const monitor = document.getElementById('section-monitor');
+            const peripherals = document.getElementById('section-peripherals');
+            const desktopOnly = document.getElementById('desktop-only-peripherals');
+
+            // Default State
+            computing.style.display = 'none';
+            monitor.style.display = 'none';
+            peripherals.style.display = 'none';
+            desktopOnly.style.display = 'none';
+
+            if (category === 'Laptop') {
+                computing.style.display = 'block';
+                peripherals.style.display = 'block';
+            } else if (category === 'Desktop') {
+                computing.style.display = 'block';
+                peripherals.style.display = 'block';
+                desktopOnly.style.display = 'block';
+            } else if (category === 'Monitor') {
+                monitor.style.display = 'block';
+            } else if (category === 'Accessory' || category === 'Other') {
+                // Keep it basic
+            }
+        }
+
+        // Run once on load to set initial state
+        document.addEventListener('DOMContentLoaded', toggleFormFields);
 
         function showToast(message) {
             let toast = document.getElementById('copyToast');
