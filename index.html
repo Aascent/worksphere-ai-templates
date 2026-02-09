@@ -1843,6 +1843,27 @@
             </div>
         </div>
     </div>
+
+    <!-- Confirm Action Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 1rem;">
+                <div class="modal-body p-4 text-center">
+                    <div class="text-danger mb-3" style="font-size: 3rem;">
+                        <i class="bi bi-exclamation-octagon"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2" id="confirm-title">Confirm Deallocation</h5>
+                    <p class="text-muted small mb-4" id="confirm-message">Are you sure you want to deallocate this
+                        asset?</p>
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-danger fw-bold" onclick="deallocateAsset()">Yes,
+                            Deallocate</button>
+                        <button type="button" class="btn btn-light fw-bold" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
