@@ -646,12 +646,18 @@
                 <input type="text" id="searchInput" class="form-control border-start-0 ps-0"
                     placeholder="Search serial, model, or employee..." onkeyup="filterTable()">
             </div>
-            <select id="categoryFilter" class="form-select w-auto text-muted" style="min-width: 180px;"
+            <select id="categoryFilter" class="form-select w-auto text-muted" style="min-width: 200px;"
                 onchange="filterTable()">
                 <option value="">Filter by Category</option>
-                <option value="Laptop">Laptops</option>
-                <option value="Desktop">Desktops</option>
-                <option value="Accessories">Accessories</option>
+                <option value="Laptop">Laptop</option>
+                <option value="Desktop">Desktop / Mac Mini</option>
+                <option value="Mobile">Mobile (Android/iOS)</option>
+                <option value="Peripherals">Peripherals (Mouse/Keyboard)</option>
+                <option value="Power">Power (Charger/Adapter)</option>
+                <option value="Connectivity">Connectivity (Cable/Hub)</option>
+                <option value="Storage">Storage (SSD/HDD)</option>
+                <option value="Bags">Bags / Cases</option>
+                <option value="Other">Other</option>
             </select>
             <select id="statusFilter" class="form-select w-auto text-muted" style="min-width: 160px;"
                 onchange="filterTable()">
@@ -1077,9 +1083,12 @@
                                 <label class="form-label">Category</label>
                                 <select id="assetCategory" class="form-select" onchange="toggleFormFields()">
                                     <option value="Laptop" selected>Laptop</option>
-                                    <option value="Desktop">Desktop</option>
-                                    <option value="Monitor">Monitor</option>
-                                    <option value="Accessory">Accessory/Peripheral</option>
+                                    <option value="Desktop">Desktop / Mac Mini Box</option>
+                                    <option value="Mobile">Mobile (Android / iPhone)</option>
+                                    <option value="Peripheral">Peripheral (Mouse/Keyboard/Pad)</option>
+                                    <option value="Power">Power (Charger / Adapter)</option>
+                                    <option value="Cable">Cable (LAN / HDMI / USB)</option>
+                                    <option value="Bag">Laptop Bag</option>
                                     <option value="Other">Other</option>
                                 </select>
                             </div>
@@ -1332,17 +1341,14 @@
             peripherals.style.display = 'none';
             desktopOnly.style.display = 'none';
 
-            if (category === 'Laptop') {
+            if (category === 'Laptop' || category === 'Desktop' || category === 'Mobile') {
                 computing.style.display = 'block';
                 peripherals.style.display = 'block';
-            } else if (category === 'Desktop') {
-                computing.style.display = 'block';
-                peripherals.style.display = 'block';
-                desktopOnly.style.display = 'block';
+                if (category === 'Desktop') desktopOnly.style.display = 'block';
             } else if (category === 'Monitor') {
                 monitor.style.display = 'block';
-            } else if (category === 'Accessory' || category === 'Other') {
-                // Keep it basic
+            } else {
+                // Keep it basic for cables, bags, etc.
             }
         }
 
