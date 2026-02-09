@@ -351,6 +351,20 @@
             border-radius: 50px;
         }
 
+        .badge-warranty-near {
+            background: #FEF3C7;
+            color: #92400E;
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid #F59E0B;
+            margin-top: 4px;
+        }
+
         /* --- Avatars & Entities --- */
         .avatar-circle {
             width: 32px;
@@ -693,6 +707,19 @@
                     </div>
                 </div>
             </div>
+            <!-- Warranty Expiry -->
+            <div class="col-xl col-lg-12 col-md-12">
+                <div class="kpi-card h-100 border-warning border-opacity-50" style="background: #FFFBEB;">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-warning text-uppercase small fw-bold mb-1">Warranty Watch (30d)</p>
+                            <h2 class="fw-bold mb-0" style="color: #B45309;">03</h2>
+                        </div>
+                        <div class="kpi-icon bg-white text-warning shadow-sm"><i class="bi bi-shield-exclamation"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="d-flex gap-3 mb-4">
@@ -756,6 +783,7 @@
                         specs: 'Intel Core i5-1035G1, 16.0 GB RAM',
                         os: 'Windows 11 Home',
                         date: '16-07-2020',
+                        warranty: '16-07-2023',
                         mouse: '2237LZD2J518 (Logitech)',
                         headphone: '131000158 (Sennheiser)',
                         charger: 'WHHRHA1RDST34',
@@ -809,6 +837,7 @@
                         specs: '11th Gen Intel i5-1135G7, 16.0 GB RAM',
                         os: 'Windows 11 [24H2]',
                         date: '24-11-2025',
+                        warranty: '24-11-2025',
                         mouse: 'Wireless Mouse (Included)',
                         headphone: 'N/A',
                         charger: 'P112F301 (Reg Model)',
@@ -825,8 +854,12 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="font-monospace text-muted">
-                            <span class="badge-date">24/11/2025</span>
+                        <td>
+                            <div class="d-flex flex-column">
+                                <span class="badge-date">24/11/2025</span>
+                                <span class="badge-warranty-near"><i class="bi bi-clock-history"></i> Expiring
+                                    Soon</span>
+                            </div>
                         </td>
                         <td class="font-monospace small text-muted">
                             <span class="serial-tag" onclick="copyToClipboard('4G2LYR3', event)">4G2LYR3</span>
@@ -1081,6 +1114,10 @@
                         <span class="spec-value small" id="d-charger">--</span>
                     </div>
                 </div>
+            </div>
+            <div class="spec-item mt-2">
+                <span class="spec-label">Warranty Expiry</span>
+                <span class="spec-value small fw-bold text-danger" id="d-warranty-date">--</span>
             </div>
             <div class="spec-item mt-2">
                 <span class="spec-label">Other Assets</span>
@@ -1396,6 +1433,7 @@
             document.getElementById('d-otg').textContent = data.otg || 'N/A';
             document.getElementById('d-charger').textContent = data.charger || 'N/A';
             document.getElementById('d-others').textContent = data.others || 'N/A';
+            document.getElementById('d-warranty-date').textContent = data.warranty || 'N/A';
 
             // Handle Status Badge & Button Text
             const badgeContainer = document.getElementById('d-status-badge');
