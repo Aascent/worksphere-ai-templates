@@ -219,12 +219,33 @@
         }
 
         .table tbody tr {
-            transition: background-color 0.15s;
+            transition: all 0.2s ease;
             cursor: pointer;
+            border-left: 3px solid transparent;
         }
 
         .table tbody tr:hover {
-            background-color: #F9FAFB;
+            background-color: #f8fafc;
+            border-left-color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        /* --- Custom Data Styling --- */
+        .serial-tag {
+            font-family: 'JetBrains Mono', 'Roboto Mono', monospace;
+            font-size: 0.75rem;
+            background: #f1f5f9;
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        .specs-snippet {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            margin-top: 2px;
+            font-weight: 500;
         }
 
         /* --- Badges --- */
@@ -594,15 +615,18 @@
                                 <div class="bg-light rounded p-2 me-3 text-primary"><i class="bi bi-laptop fs-5"></i>
                                 </div>
                                 <div>
-                                    <div class="fw-bold">HP Laptop 15s</div>
-                                    <div class="small text-muted">ID: AST-771</div>
+                                    <div class="fw-bold text-dark">HP Laptop 15s</div>
+                                    <div class="specs-snippet">i5-1035G1 • 16GB RAM</div>
+                                    <div class="small text-muted mt-1" style="font-size: 0.7rem;">ID: AST-771</div>
                                 </div>
                             </div>
                         </td>
                         <td class="font-monospace text-muted">
                             <span class="badge-date">16/07/2020</span>
                         </td>
-                        <td class="font-monospace small text-muted">CND026CQNP</td>
+                        <td class="font-monospace small text-muted">
+                            <span class="serial-tag">CND026CQNP</span>
+                        </td>
                         <td>
                             <span class="badge badge-allocated">Allocated</span>
                             <i class="bi bi-check-all text-success ms-1" title="Confirmed by Employee"></i>
@@ -640,15 +664,18 @@
                                 <div class="bg-light rounded p-2 me-3 text-primary"><i class="bi bi-laptop fs-5"></i>
                                 </div>
                                 <div>
-                                    <div class="fw-bold">Dell Inspiron 15</div>
-                                    <div class="small text-muted">ID: AST-892</div>
+                                    <div class="fw-bold text-dark">Dell Inspiron 15</div>
+                                    <div class="specs-snippet">i5-1135G7 • 16GB RAM</div>
+                                    <div class="small text-muted mt-1" style="font-size: 0.7rem;">ID: AST-892</div>
                                 </div>
                             </div>
                         </td>
                         <td class="font-monospace text-muted">
                             <span class="badge-date">24/11/2025</span>
                         </td>
-                        <td class="font-monospace small text-muted">4G2LYR3</td>
+                        <td class="font-monospace small text-muted">
+                            <span class="serial-tag">4G2LYR3</span>
+                        </td>
                         <td>
                             <span class="badge badge-waiting">Pending Ack.</span>
                             <i class="bi bi-envelope-exclamation-fill text-warning ms-1"
@@ -687,15 +714,18 @@
                                 <div class="bg-light rounded p-2 me-3 text-primary"><i class="bi bi-cpu fs-5"></i>
                                 </div>
                                 <div>
-                                    <div class="fw-bold">Mac Mini Box</div>
-                                    <div class="small text-muted">ID: AST-104</div>
+                                    <div class="fw-bold text-dark">Mac Mini Box</div>
+                                    <div class="specs-snippet">Apple M1 • 8GB RAM</div>
+                                    <div class="small text-muted mt-1" style="font-size: 0.7rem;">ID: AST-104</div>
                                 </div>
                             </div>
                         </td>
                         <td class="font-monospace text-muted">
                             <span class="badge-date">18/04/2023</span>
                         </td>
-                        <td class="font-monospace small text-muted">C07G1LGQ6NV</td>
+                        <td class="font-monospace small text-muted">
+                            <span class="serial-tag">C07G1LGQ6NV</span>
+                        </td>
                         <td>
                             <span class="badge badge-allocated">Allocated</span>
                             <i class="bi bi-check-all text-success ms-1" title="Confirmed by Employee"></i>
@@ -732,15 +762,18 @@
                                 <div class="bg-light rounded p-2 me-3 text-primary"><i class="bi bi-laptop fs-5"></i>
                                 </div>
                                 <div>
-                                    <div class="fw-bold">HP Pavillion Power</div>
-                                    <div class="small text-muted">ID: AST-004</div>
+                                    <div class="fw-bold text-dark">HP Pavillion Power</div>
+                                    <div class="specs-snippet">i5-1135G7 • 8GB RAM</div>
+                                    <div class="small text-muted mt-1" style="font-size: 0.7rem;">ID: AST-004</div>
                                 </div>
                             </div>
                         </td>
                         <td class="font-monospace text-muted">
                             <span class="badge-date">01/12/2023</span>
                         </td>
-                        <td class="font-monospace small text-muted">5CD7317YGO</td>
+                        <td class="font-monospace small text-muted">
+                            <span class="serial-tag">5CD7317YGO</span>
+                        </td>
                         <td><span class="badge badge-available">Available</span></td>
                         <td>
                             <div class="d-flex align-items-center text-muted small">
