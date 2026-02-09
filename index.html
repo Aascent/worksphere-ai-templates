@@ -277,15 +277,48 @@
             border-radius: 50px;
         }
 
-        /* Entity Badges */
-        .entity-tag {
-            font-size: 0.65rem;
+        /* --- Avatars & Entities --- */
+        .avatar-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
             font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 4px;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border: 2px solid white;
+        }
+
+        .avatar-aascent {
+            background: linear-gradient(135deg, #8D321F, #b44a34);
+        }
+
+        .avatar-aaroha {
+            background: linear-gradient(135deg, #059669, #10b981);
+        }
+
+        .avatar-external {
+            background: linear-gradient(135deg, #7c3aed, #a78bfa);
+        }
+
+        .avatar-unassigned {
+            background: #f1f5f9;
+            color: #94a3b8;
+            border: 1px dashed #cbd5e1;
+            box-shadow: none;
+        }
+
+        .entity-tag {
+            font-size: 0.6rem;
+            font-weight: 800;
+            padding: 1px 6px;
+            border-radius: 3px;
             text-transform: uppercase;
+            letter-spacing: 0.02em;
             display: inline-block;
-            margin-top: 2px;
         }
 
         .tag-aascent {
@@ -293,19 +326,15 @@
             color: #991b1b;
         }
 
-        /* Light version of terracotta */
         .tag-aaroha {
-            background: #e0e7ff;
-            color: #3730a3;
+            background: #d1fae5;
+            color: #065f46;
         }
 
-        /* Indigo/Blue */
         .tag-external {
             background: #f3e8ff;
             color: #6b21a8;
         }
-
-        /* Purple */
 
         .badge-date {
             border: 1px solid var(--badge-date-border);
@@ -633,11 +662,14 @@
                         </td>
                         <td>
                             <div class="d-flex align-items-center">
-                                <div class="bg-primary text-white rounded-circle small me-2 d-flex align-items-center justify-content-center"
-                                    style="width:24px;height:24px;">SM</div>
+                                <div class="avatar-circle avatar-aascent me-3">SM</div>
                                 <div>
-                                    <div class="fw-medium small" style="line-height: 1;">Sachin Modh</div>
-                                    <span class="entity-tag tag-aascent">Aascent</span>
+                                    <div class="fw-bold text-dark small" style="line-height: 1.2;">Sachin Modh</div>
+                                    <div class="d-flex align-items-center gap-2 mt-1">
+                                        <span class="entity-tag tag-aascent">Aascent</span>
+                                        <span class="text-muted" style="font-size: 0.65rem;"><span class="fw-bold"
+                                                style="color: #8D321F;">AI</span>-002</span>
+                                    </div>
                                 </div>
                             </div>
                         </td>
@@ -649,7 +681,7 @@
                         status: 'Pending Ack.',
                         serial: '4G2LYR3',
                         empName: 'Nayan Patel',
-                        empId: '(New Joiner)',
+                        empId: 'ARI-New',
                         entity: 'Aaroha',
                         specs: '11th Gen Intel i5-1135G7, 16.0 GB RAM',
                         os: 'Windows 11 [24H2]',
@@ -683,11 +715,14 @@
                         </td>
                         <td>
                             <div class="d-flex align-items-center">
-                                <div class="bg-warning text-white rounded-circle small me-2 d-flex align-items-center justify-content-center"
-                                    style="width:24px;height:24px;">NP</div>
+                                <div class="avatar-circle avatar-aaroha me-3">NP</div>
                                 <div>
-                                    <div class="fw-medium small" style="line-height: 1;">Nayan Patel</div>
-                                    <span class="entity-tag tag-aaroha">Aaroha</span>
+                                    <div class="fw-bold text-dark small" style="line-height: 1.2;">Nayan Patel</div>
+                                    <div class="d-flex align-items-center gap-2 mt-1">
+                                        <span class="entity-tag tag-aaroha">Aaroha</span>
+                                        <span class="text-muted" style="font-size: 0.65rem;"><span class="fw-bold"
+                                                style="color: #059669;">ARI</span>-New</span>
+                                    </div>
                                 </div>
                             </div>
                         </td>
@@ -700,7 +735,7 @@
                         serial: 'C07G1LGQ6NV',
                         empName: 'Yash Vithalani',
                         empId: 'ARI-14',
-                        entity: 'External',
+                        entity: 'Aaroha',
                         specs: 'Apple M1, 8 GB RAM',
                         os: 'macOS Monterey',
                         date: '18-04-2023',
@@ -732,11 +767,14 @@
                         </td>
                         <td>
                             <div class="d-flex align-items-center">
-                                <div class="bg-indigo text-white rounded-circle small me-2 d-flex align-items-center justify-content-center"
-                                    style="width:24px;height:24px; background-color: #4F46E5;">YV</div>
+                                <div class="avatar-circle avatar-aaroha me-3">YV</div>
                                 <div>
-                                    <div class="fw-medium small" style="line-height: 1;">Yash Vithalani</div>
-                                    <span class="entity-tag tag-external">External</span>
+                                    <div class="fw-bold text-dark small" style="line-height: 1.2;">Yash Vithalani</div>
+                                    <div class="d-flex align-items-center gap-2 mt-1">
+                                        <span class="entity-tag tag-aaroha">Aaroha</span>
+                                        <span class="text-muted" style="font-size: 0.65rem;"><span class="fw-bold"
+                                                style="color: #059669;">ARI</span>-14</span>
+                                    </div>
                                 </div>
                             </div>
                         </td>
@@ -776,11 +814,11 @@
                         </td>
                         <td><span class="badge badge-available">Available</span></td>
                         <td>
-                            <div class="d-flex align-items-center text-muted small">
-                                <div class="bg-light rounded-circle me-2 d-flex align-items-center justify-content-center border"
-                                    style="width:24px;height:24px;"><i class="bi bi-box-seam"
-                                        style="font-size: 0.7rem;"></i></div>
-                                <span>Unassigned</span>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle avatar-unassigned me-3">
+                                    <i class="bi bi-box-seam" style="font-size: 0.8rem;"></i>
+                                </div>
+                                <div class="fw-bold text-muted small">Unassigned</div>
                             </div>
                         </td>
                         <td class="text-end pe-4 text-muted small">1 week ago</td>
