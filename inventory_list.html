@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkSphare | Asset Management Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --lms-primary: #6366f1;
+            --lms-sidebar: #1e293b;
+            --lms-bg: #f8fafc;
+        }
+
+        body { font-family: 'Inter', sans-serif; background-color: var(--lms-bg); overflow-x: hidden; }
+        
+        /* Sidebar Simulation */
+        .sidebar { width: 240px; background: var(--lms-sidebar); min-height: 100vh; position: fixed; color: white; }
+        .main-content { margin-left: 240px; padding: 2rem; transition: 0.3s; }
+        
+        /* Dashboard Styling */
+        .stat-card { border: none; border-radius: 12px; transition: transform 0.2s; }
+        .stat-card:hover { transform: translateY(-3px); }
+        .asset-table-card { border: none; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+
+        /* Badge Logic */
+        .badge-available { background-color: #dcfce7; color: #166534; }
+        .badge-allocated { background-color: #fef9c3; color: #854d0e; }
+        
+        /* Side Panel Styling */
+        .side-panel {
+            position: fixed; top: 0; right: -500px;
+            width: 480px; height: 100vh;
+            background: white; z-index: 1060;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column;
+        }
+        .side-panel.active { right: 0; }
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4); z-index: 1050;
+            display: none;
+        }
+        .overlay.active { display: block; }
+
+        .asset-icon-circle {
+            width: 40px; height: 40px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            background: #eff6ff; color: var(--lms-primary); font-size: 1.2rem;
+        }
+        
+        tr.clickable:hover { background-color: #f1f5f9; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar d-none d-lg-block p-3">
+        <h5 class="fw-bold mb-4 px-3 mt-2">WorkSphare</h5>
+        <div class="nav flex-column gap-2">
+            <a href="#" class="nav-link text-white-50"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
+            <a href="#" class="nav-link text-white active bg-primary rounded"><i class="bi bi-laptop me-2"></i> Assets</a>
+            <a href="#" class="nav-link text-white-50"><i class="bi bi-people me-2"></i> Employees</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h3 class="fw-bold">Asset Management</h3>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Asset Inventory</li>
+                    </ol>
+                </nav>
+            </div>
+            <button class="btn btn-primary px-4 shadow-sm" style="background-color: var(--lms-primary); border: none;">
+                <i class="bi bi-plus-lg me-2"></i> Add New Asset
+            </button>
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="card stat-card p-3 bg-white">
+                    <small class="text-muted text-uppercase fw-bold" style="font-size: 0.7rem;">Total Assets</small>
+                    <h2 class="mb-0 fw-bold">142</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card p-3 bg-white border-start border-warning border-4">
+                    <small class="text-muted text-uppercase fw-bold" style="font-size: 0.7rem;">Allocated</small>
+                    <h2 class="mb-0 fw-bold text-warning">98</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card p-3 bg-white border-start border-success border-4">
+                    <small class="text-muted text-uppercase fw-bold" style="font-size: 0.7rem;">Available</small>
+                    <h2 class="mb-0 fw-bold text-success">44</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="card asset-table-card">
+            <div class="card-header bg-white border-0 pt-4 px-4">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-0"><i class="bi bi-search"></i></span>
+                            <input type="text" class="form-control bg-light border-0" placeholder="Search by Serial or Emp ID...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-0 mt-3">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light text-muted small">
+                            <tr>
+                                <th class="ps-4">ASSET DETAILS</th>
+                                <th>CATEGORY</th>
+                                <th>SERIAL NO</th>
+                                <th>STATUS</th>
+                                <th>CURRENT HOLDER</th>
+                                <th class="text-end pe-4">ACTIONS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="assetTableBody">
+                            <tr class="clickable" onclick="openAssetPanel('HP Laptop - 15s', 'CND026CQNP', 'Allocated', 'Sachin Modh', 'AI-002', 'Processor: i5-1035G1, RAM: 16.0 GB, Windows 11')">
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="asset-icon-circle me-3"><i class="bi bi-laptop"></i></div>
+                                        <div><span class="fw-bold d-block">HP Laptop - 15s</span><small class="text-muted">ID: AST-771</small></div>
+                                    </div>
+                                </td>
+                                <td><span class="badge rounded-pill bg-light text-dark border">Laptop</span></td>
+                                <td><code>CND026CQNP</code></td>
+                                <td><span class="badge badge-allocated p-2 px-3">Allocated</span></td>
+                                <td><div class="d-flex align-items-center"><i class="bi bi-person-circle me-2"></i> Sachin Modh</div></td>
+                                <td class="text-end pe-4"><button class="btn btn-sm btn-outline-secondary">Details</button></td>
+                            </tr>
+
+                            <tr class="clickable" onclick="openAssetPanel('HP Pavillion Power', '5CD7317YGO', 'Available', 'None', 'N/A', 'Model No: 7265NGW, Adapter: ADP-150YB')">
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="asset-icon-circle me-3"><i class="bi bi-pc-display"></i></div>
+                                        <div><span class="fw-bold d-block">HP Pavillion Power</span><small class="text-muted">ID: AST-004</small></div>
+                                    </div>
+                                </td>
+                                <td><span class="badge rounded-pill bg-light text-dark border">Workstation</span></td>
+                                <td><code>5CD7317YGO</code></td>
+                                <td><span class="badge badge-available p-2 px-3">Available</span></td>
+                                <td class="text-muted">In Inventory</td>
+                                <td class="text-end pe-4"><button class="btn btn-sm btn-outline-secondary">Details</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="panelOverlay" class="overlay" onclick="closeAssetPanel()"></div>
+
+    <div id="assetPanel" class="side-panel">
+        <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold mb-0">Asset Management Panel</h5>
+            <button class="btn-close" onclick="closeAssetPanel()"></button>
+        </div>
+
+        <div class="p-4 flex-grow-1 overflow-auto">
+            <div class="text-center mb-4">
+                <div class="asset-icon-circle mx-auto mb-2" style="width: 60px; height: 60px; font-size: 1.5rem;">
+                    <i class="bi bi-laptop"></i>
+                </div>
+                <h5 id="panelTitle" class="fw-bold mb-0">--</h5>
+                <span id="panelStatus" class="badge p-2 px-3 mt-2">--</span>
+            </div>
+
+            <div class="mb-4 bg-light p-3 rounded">
+                <h6 class="text-muted small fw-bold text-uppercase mb-3">System Specifications</h6>
+                <div class="row g-2">
+                    <div class="col-6">
+                        <label class="d-block small text-muted">Serial Number</label>
+                        <code id="panelSerial" class="fw-bold">--</code>
+                    </div>
+                    <div class="col-6">
+                        <label class="d-block small text-muted">Employee ID</label>
+                        <span id="panelEmpId" class="fw-bold text-primary">--</span>
+                    </div>
+                    <div class="col-12 mt-2">
+                        <label class="d-block small text-muted">Hardware Info</label>
+                        <p id="panelSpecs" class="small mb-0">--</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h6 class="text-muted small fw-bold text-uppercase mb-3">Action Center</h6>
+                <div id="assignmentForm" style="display: none;">
+                    <div class="mb-3">
+                        <label class="form-label small">Assign to Employee</label>
+                        <select class="form-select border-0 bg-light">
+                            <option>Select Employee...</option>
+                            <option>John Doe (AI-500)</option>
+                            <option>Jane Smith (AI-501)</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary w-100" onclick="alert('Asset Assigned Successfully!')">Assign Asset</button>
+                </div>
+                
+                <div id="returnForm" style="display: none;">
+                    <div class="card border-0 bg-light p-3 mb-3">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-person-check-fill fs-3 text-primary me-3"></i>
+                            <div>
+                                <small class="text-muted d-block">Currently Held By</small>
+                                <span id="panelHolderName" class="fw-bold">--</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-danger w-100" onclick="alert('Asset Return Processed!')">Mark as Returned</button>
+                </div>
+            </div>
+
+            <hr>
+
+            <div>
+                <h6 class="text-muted small fw-bold text-uppercase mb-3">Allocation History</h6>
+                <div class="small">
+                    <div class="d-flex border-start border-2 ps-3 mb-3 pb-2 position-relative">
+                        <i class="bi bi-dot position-absolute" style="left: -9px; top: -5px; font-size: 2rem; color: var(--lms-primary);"></i>
+                        <div>
+                            <span class="d-block fw-bold">Issued to Sachin Modh</span>
+                            <small class="text-muted">16-07-2020 • HR Dept</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openAssetPanel(name, serial, status, holder, empId, specs) {
+            document.getElementById('panelTitle').innerText = name;
+            document.getElementById('panelSerial').innerText = serial;
+            document.getElementById('panelEmpId').innerText = empId;
+            document.getElementById('panelSpecs').innerText = specs;
+            document.getElementById('panelHolderName').innerText = holder;
+
+            const statusBadge = document.getElementById('panelStatus');
+            statusBadge.innerText = status;
+            statusBadge.className = status === 'Allocated' ? 'badge badge-allocated p-2 px-3 mt-2' : 'badge badge-available p-2 px-3 mt-2';
+
+            // Show appropriate forms
+            document.getElementById('assignmentForm').style.display = status === 'Available' ? 'block' : 'none';
+            document.getElementById('returnForm').style.display = status === 'Allocated' ? 'block' : 'none';
+
+            // Open Panel
+            document.getElementById('assetPanel').classList.add('active');
+            document.getElementById('panelOverlay').classList.add('active');
+        }
+
+        function closeAssetPanel() {
+            document.getElementById('assetPanel').classList.remove('active');
+            document.getElementById('panelOverlay').classList.remove('active');
+        }
+    </script>
+</body>
+</html>
