@@ -34,6 +34,12 @@
             --status-waiting-bg: #F59E0B;
             /* Amber for waiting */
             --status-waiting-text: #FFFFFF;
+            --status-repair-bg: #6366F1;
+            /* Indigo for Repair */
+            --status-damaged-bg: #F43F5E;
+            /* Rose for Damaged */
+            --status-retired-bg: #475569;
+            /* Slate for Retired */
             --badge-date-border: #8D321F;
         }
 
@@ -320,6 +326,27 @@
         .badge-waiting {
             background: var(--status-waiting-bg);
             color: var(--status-waiting-text);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+        }
+
+        .badge-repair {
+            background: var(--status-repair-bg);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+        }
+
+        .badge-damaged {
+            background: var(--status-damaged-bg);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+        }
+
+        .badge-retired {
+            background: var(--status-retired-bg);
+            color: white;
             padding: 0.5rem 1rem;
             border-radius: 50px;
         }
@@ -662,8 +689,11 @@
             <select id="statusFilter" class="form-select w-auto text-muted" style="min-width: 160px;"
                 onchange="filterTable()">
                 <option value="">Filter by Status</option>
-                <option value="Allocated">Allocated</option>
                 <option value="Available">Available</option>
+                <option value="Allocated">Allocated</option>
+                <option value="Under Repair">Under Repair</option>
+                <option value="Damaged">Damaged</option>
+                <option value="Retired">Retired</option>
                 <option value="Pending Ack.">Pending Ack.</option>
             </select>
             <select id="entityFilter" class="form-select w-auto text-muted" style="min-width: 160px;"
@@ -1261,9 +1291,11 @@
                             <div class="col-md-4">
                                 <label class="form-label">Initial Status</label>
                                 <select class="form-select">
-                                    <option selected>Available (In Stock)</option>
+                                    <option selected>Available</option>
                                     <option>Allocated</option>
                                     <option>Under Repair</option>
+                                    <option>Damaged</option>
+                                    <option>Retired</option>
                                 </select>
                             </div>
                             <div class="col-md-8">
@@ -1349,6 +1381,18 @@
                 badgeContainer.innerHTML = '<span class="badge badge-waiting fs-6">Pending Acknowledgement</span>';
                 actionBtn.innerHTML = '<i class="bi bi-envelope-paper me-2"></i> Resend Email';
                 actionBtn.className = 'btn btn-warning w-100 text-white';
+            } else if (data.status === 'Under Repair') {
+                badgeContainer.innerHTML = '<span class="badge badge-repair fs-6">Under Repair</span>';
+                actionBtn.innerHTML = '<i class="bi bi-tools me-2"></i> Update Service Status';
+                actionBtn.className = 'btn btn-outline-secondary w-100';
+            } else if (data.status === 'Damaged') {
+                badgeContainer.innerHTML = '<span class="badge badge-damaged fs-6">Damaged</span>';
+                actionBtn.innerHTML = '<i class="bi bi-shield-exclamation me-2"></i> Report Assessment';
+                actionBtn.className = 'btn btn-danger w-100';
+            } else if (data.status === 'Retired') {
+                badgeContainer.innerHTML = '<span class="badge badge-retired fs-6">Retired</span>';
+                actionBtn.innerHTML = '<i class="bi bi-trash me-2"></i> Disposal Record';
+                actionBtn.className = 'btn btn-dark w-100';
             } else {
                 badgeContainer.innerHTML = '<span class="badge badge-available fs-6">Available</span>';
                 actionBtn.innerHTML = '<i class="bi bi-person-plus me-2"></i> Assign to Employee';
