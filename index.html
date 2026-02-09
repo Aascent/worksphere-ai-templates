@@ -12,24 +12,26 @@
 
     <style>
         :root {
-            /* Modern SaaS Color Palette */
-            --primary: #4F46E5;
-            /* Indigo-600 */
-            --primary-hover: #4338ca;
-            --bg-body: #F3F4F6;
-            /* Cool Gray 100 */
+            /* Palette inspired by User Reference Image */
+            --primary: #8D321F;
+            /* Terracotta/Reddish-Brown */
+            --primary-hover: #722819;
+            --secondary: #1FB5FF;
+            /* Cyan/Light Blue */
+            --bg-body: #F8F9FD;
+            /* Very light cool grey */
             --bg-surface: #FFFFFF;
-            --text-main: #111827;
-            /* Gray 900 */
-            --text-muted: #6B7280;
-            /* Gray 500 */
-            --border-color: #E5E7EB;
+            --sidebar-bg: #FFFFFF;
+            --text-main: #374151;
+            --text-muted: #626973;
+            --border-color: #F1F3F5;
 
-            /* Status Colors */
-            --status-available-bg: #DCFCE7;
-            --status-available-text: #166534;
-            --status-allocated-bg: #FEF3C7;
-            --status-allocated-text: #92400E;
+            /* Status Mapping from Image */
+            --status-approved-bg: #8D321F;
+            --status-approved-text: #FFFFFF;
+            --status-pending-bg: #1FB5FF;
+            --status-pending-text: #FFFFFF;
+            --badge-date-border: #8D321F;
         }
 
         body {
@@ -42,40 +44,51 @@
         /* --- Sidebar Navigation --- */
         .sidebar {
             width: 260px;
-            background: #111827;
-            /* Dark Slate */
+            background: var(--sidebar-bg);
             height: 100vh;
             position: fixed;
             left: 0;
             top: 0;
-            color: white;
+            color: var(--text-main);
             z-index: 1000;
             display: flex;
             flex-direction: column;
+            border-right: 1px solid var(--border-color);
         }
 
         .sidebar-brand {
-            padding: 1.5rem;
+            padding: 2rem 1.5rem;
             font-size: 1.25rem;
             font-weight: 700;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-main);
         }
 
         .nav-link {
-            color: #9CA3AF;
+            color: var(--text-muted);
             padding: 0.75rem 1.5rem;
+            margin: 0.25rem 1rem;
             font-size: 0.95rem;
+            font-weight: 500;
             display: flex;
             align-items: center;
             gap: 12px;
             transition: all 0.2s;
+            border-radius: 50px;
+            /* Pillow shape from image */
         }
 
-        .nav-link:hover,
+        .nav-link:hover {
+            color: var(--primary);
+            background: transparent;
+        }
+
         .nav-link.active {
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            border-right: 3px solid var(--primary);
+            background: var(--primary) !important;
+            color: white !important;
+            box-shadow: 0 4px 12px rgba(141, 50, 31, 0.2);
         }
 
         /* --- Main Content Area --- */
@@ -156,13 +169,26 @@
         }
 
         .badge-allocated {
-            background: var(--status-allocated-bg);
-            color: var(--status-allocated-text);
+            background: var(--status-approved-bg);
+            color: var(--status-approved-text);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
         }
 
         .badge-available {
-            background: var(--status-available-bg);
-            color: var(--status-available-text);
+            background: var(--status-pending-bg);
+            color: var(--status-pending-text);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+        }
+
+        .badge-date {
+            border: 1px solid var(--badge-date-border);
+            color: var(--primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
         }
 
         /* --- Slide-Over Drawer --- */
@@ -295,18 +321,17 @@
         }
 
         .btn-save {
-            background-color: #2563EB;
-            /* Bright blue like screenshot */
+            background-color: var(--primary);
             color: white;
             font-weight: 600;
             padding: 0.625rem 1.5rem;
             border-radius: 8px;
             border: none;
-            transition: background-color 0.2s;
+            transition: opacity 0.2s;
         }
 
         .btn-save:hover {
-            background-color: #1D4ED8;
+            opacity: 0.9;
         }
 
         .btn-cancel {
@@ -348,12 +373,12 @@
             <a href="#" class="nav-link"><i class="bi bi-people"></i> Employees</a>
             <a href="#" class="nav-link"><i class="bi bi-file-earmark-text"></i> Reports</a>
         </div>
-        <div class="mt-auto p-4 border-top border-secondary">
-            <div class="d-flex align-items-center gap-3">
-                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center text-white"
-                    style="width: 36px; height: 36px;">JD</div>
+        <div class="mt-auto p-4">
+            <div class="d-flex align-items-center gap-3 p-2 rounded-3 bg-light">
+                <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center text-white"
+                    style="width: 36px; height: 36px; font-weight: 600;">JD</div>
                 <div style="line-height: 1.2;">
-                    <small class="d-block text-white">John Doe</small>
+                    <small class="d-block fw-bold text-dark">John Doe</small>
                     <small class="text-muted" style="font-size: 0.75rem;">IT Admin</small>
                 </div>
             </div>
@@ -367,8 +392,7 @@
                 <h2 class="fw-bold mb-1">Asset Inventory</h2>
                 <p class="text-muted mb-0">Manage allocations, track hardware, and view availability.</p>
             </div>
-            <button class="btn btn-primary px-4 py-2 fw-medium shadow-sm"
-                style="background-color: var(--primary); border:none;" data-bs-toggle="modal"
+            <button class="btn btn-primary px-4 py-2 fw-medium shadow-sm" style="border:none;" data-bs-toggle="modal"
                 data-bs-target="#addAssetModal">
                 <i class="bi bi-plus-lg me-2"></i> Add New Asset
             </button>
@@ -461,8 +485,9 @@
                                 </div>
                             </div>
                         </td>
-                        <td>Laptop</td>
-                        <td class="font-monospace text-muted">CND026CQNP</td>
+                        <td class="font-monospace text-muted">
+                            <span class="badge-date">16/07/2020</span>
+                        </td>
                         <td><span class="badge badge-allocated">Allocated</span></td>
                         <td>
                             <div class="d-flex align-items-center">
@@ -494,8 +519,9 @@
                                 </div>
                             </div>
                         </td>
-                        <td>Workstation</td>
-                        <td class="font-monospace text-muted">5CD7317YGO</td>
+                        <td class="font-monospace text-muted">
+                            <span class="badge-date">01/12/2023</span>
+                        </td>
                         <td><span class="badge badge-available">Available</span></td>
                         <td class="text-muted small"><em>In Inventory</em></td>
                         <td class="text-end pe-4 text-muted small">1 week ago</td>
@@ -521,8 +547,9 @@
                                 </div>
                             </div>
                         </td>
-                        <td>Laptop</td>
-                        <td class="font-monospace text-muted">DH9YGJ3</td>
+                        <td class="font-monospace text-muted">
+                            <span class="badge-date">24/01/2025</span>
+                        </td>
                         <td><span class="badge badge-allocated">Allocated</span></td>
                         <td>
                             <div class="d-flex align-items-center">
