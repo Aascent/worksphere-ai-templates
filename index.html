@@ -596,18 +596,29 @@
         <div class="d-flex gap-3 mb-4">
             <div class="input-group" style="max-width: 300px;">
                 <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
-                <input type="text" class="form-control border-start-0 ps-0"
-                    placeholder="Search serial, model, or employee...">
+                <input type="text" id="searchInput" class="form-control border-start-0 ps-0"
+                    placeholder="Search serial, model, or employee..." onkeyup="filterTable()">
             </div>
-            <select class="form-select w-auto text-muted" style="min-width: 180px;">
-                <option>Filter by Category</option>
-                <option>Laptops</option>
-                <option>Accessories</option>
+            <select id="categoryFilter" class="form-select w-auto text-muted" style="min-width: 180px;"
+                onchange="filterTable()">
+                <option value="">Filter by Category</option>
+                <option value="Laptop">Laptops</option>
+                <option value="Desktop">Desktops</option>
+                <option value="Accessories">Accessories</option>
             </select>
-            <select class="form-select w-auto text-muted" style="min-width: 160px;">
-                <option>Filter by Status</option>
-                <option>Allocated</option>
-                <option>Available</option>
+            <select id="statusFilter" class="form-select w-auto text-muted" style="min-width: 160px;"
+                onchange="filterTable()">
+                <option value="">Filter by Status</option>
+                <option value="Allocated">Allocated</option>
+                <option value="Available">Available</option>
+                <option value="Pending Ack.">Pending Ack.</option>
+            </select>
+            <select id="entityFilter" class="form-select w-auto text-muted" style="min-width: 160px;"
+                onchange="filterTable()">
+                <option value="">Filter by Entity</option>
+                <option value="Aascent">Aascent</option>
+                <option value="Aaroha">Aaroha</option>
+                <option value="External">External</option>
             </select>
         </div>
 
@@ -624,7 +635,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr onclick="openDrawer({
+                    <tr class="asset-row" data-category="Laptop" data-status="Allocated" data-entity="Aascent" onclick="openDrawer({
                         title: 'HP Laptop 15s-du2077tu',
                         status: 'Allocated',
                         serial: 'CND026CQNP',
@@ -676,7 +687,8 @@
                         <td class="text-end pe-4 text-muted small">2 days ago</td>
                     </tr>
 
-                    <tr onclick="openDrawer({
+                    <tr class="asset-row" data-category="Laptop" data-status="Pending Ack." data-entity="External"
+                        onclick="openDrawer({
                         title: 'Dell Inspiron 15 300',
                         status: 'Pending Ack.',
                         serial: '4G2LYR3',
@@ -729,7 +741,7 @@
                         <td class="text-end pe-4 text-muted small">Just now</td>
                     </tr>
 
-                    <tr onclick="openDrawer({
+                    <tr class="asset-row" data-category="Desktop" data-status="Allocated" data-entity="Aaroha" onclick="openDrawer({
                         title: 'Mac Mini Box (MGNR3HNIA)',
                         status: 'Allocated',
                         serial: 'C07G1LGQ6NV',
@@ -781,7 +793,7 @@
                         <td class="text-end pe-4 text-muted small">3 weeks ago</td>
                     </tr>
 
-                    <tr onclick="openDrawer({
+                    <tr class="asset-row" data-category="Laptop" data-status="Allocated" data-entity="Aaroha" onclick="openDrawer({
                         title: 'HP Laptop 15s-du3xxxx',
                         status: 'Allocated',
                         serial: 'CND1504BR9',
@@ -833,7 +845,7 @@
                         <td class="text-end pe-4 text-muted small">1 month ago</td>
                     </tr>
 
-                    <tr onclick="openDrawer({
+                    <tr class="asset-row" data-category="Laptop" data-status="Available" data-entity="None" onclick="openDrawer({
                         title: 'HP Pavillion Power',
                         status: 'Available',
                         serial: '5CD7317YGO',
@@ -1139,9 +1151,36 @@
             document.getElementById('overlay').classList.add('active');
         }
 
+
         function closeDrawer() {
             document.getElementById('drawer').classList.remove('active');
             document.getElementById('overlay').classList.remove('active');
+        }
+
+        function filterTable() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const category = document.getElementById('categoryFilter').value;
+            const status = document.getElementById('statusFilter').value;
+            const entity = document.getElementById('entityFilter').value;
+            const rows = document.querySelectorAll('.asset-row');
+
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                const rowCategory = row.getAttribute('data-category');
+                const rowStatus = row.getAttribute('data-status');
+                const rowEntity = row.getAttribute('data-entity');
+
+                const matchesSearch = text.includes(query);
+                const matchesCategory = !category || rowCategory === category;
+                const matchesStatus = !status || rowStatus === status;
+                const matchesEntity = !entity || rowEntity === entity;
+
+                if (matchesSearch && matchesCategory && matchesStatus && matchesEntity) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
         }
     </script>
 </body>
