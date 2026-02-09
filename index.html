@@ -256,6 +256,36 @@
             border-radius: 50px;
         }
 
+        /* Entity Badges */
+        .entity-tag {
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-top: 2px;
+        }
+
+        .tag-aascent {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Light version of terracotta */
+        .tag-aaroha {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        /* Indigo/Blue */
+        .tag-external {
+            background: #f3e8ff;
+            color: #6b21a8;
+        }
+
+        /* Purple */
+
         .badge-date {
             border: 1px solid var(--badge-date-border);
             color: var(--primary);
@@ -550,6 +580,7 @@
                         serial: 'CND026CQNP',
                         empName: 'Sachin Modh',
                         empId: 'AI-002',
+                        entity: 'Aascent',
                         specs: 'Intel Core i5-1035G1, 16.0 GB RAM',
                         os: 'Windows 11 Home',
                         date: '16-07-2020',
@@ -580,7 +611,10 @@
                             <div class="d-flex align-items-center">
                                 <div class="bg-primary text-white rounded-circle small me-2 d-flex align-items-center justify-content-center"
                                     style="width:24px;height:24px;">SM</div>
-                                Sachin Modh
+                                <div>
+                                    <div class="fw-medium small" style="line-height: 1;">Sachin Modh</div>
+                                    <span class="entity-tag tag-aascent">Aascent</span>
+                                </div>
                             </div>
                         </td>
                         <td class="text-end pe-4 text-muted small">2 days ago</td>
@@ -592,6 +626,7 @@
                         serial: '4G2LYR3',
                         empName: 'Nayan Patel',
                         empId: '(New Joiner)',
+                        entity: 'Aaroha',
                         specs: '11th Gen Intel i5-1135G7, 16.0 GB RAM',
                         os: 'Windows 11 [24H2]',
                         date: '24-11-2025',
@@ -623,7 +658,10 @@
                             <div class="d-flex align-items-center">
                                 <div class="bg-warning text-white rounded-circle small me-2 d-flex align-items-center justify-content-center"
                                     style="width:24px;height:24px;">NP</div>
-                                Nayan Patel
+                                <div>
+                                    <div class="fw-medium small" style="line-height: 1;">Nayan Patel</div>
+                                    <span class="entity-tag tag-aaroha">Aaroha</span>
+                                </div>
                             </div>
                         </td>
                         <td class="text-end pe-4 text-muted small">Just now</td>
@@ -635,6 +673,7 @@
                         serial: 'C07G1LGQ6NV',
                         empName: 'Yash Vithalani',
                         empId: 'ARI-14',
+                        entity: 'External',
                         specs: 'Apple M1, 8 GB RAM',
                         os: 'macOS Monterey',
                         date: '18-04-2023',
@@ -665,7 +704,10 @@
                             <div class="d-flex align-items-center">
                                 <div class="bg-indigo text-white rounded-circle small me-2 d-flex align-items-center justify-content-center"
                                     style="width:24px;height:24px; background-color: #4F46E5;">YV</div>
-                                Yash Vithalani
+                                <div>
+                                    <div class="fw-medium small" style="line-height: 1;">Yash Vithalani</div>
+                                    <span class="entity-tag tag-external">External</span>
+                                </div>
                             </div>
                         </td>
                         <td class="text-end pe-4 text-muted small">3 weeks ago</td>
@@ -775,8 +817,9 @@
                     <i class="bi bi-person-badge text-muted me-2"></i>
                     <span class="text-muted small">Employee</span>
                 </div>
-                <div class="fw-bold mb-1" id="d-empName">--</div>
-                <div class="small text-muted" id="d-empId">--</div>
+                <div class="fw-bold mb-0" id="d-empName">--</div>
+                <div id="d-entity-drawer"></div>
+                <div class="small text-muted mt-1" id="d-empId">--</div>
                 <hr class="my-2">
                 <div class="d-flex justify-content-between small">
                     <span class="text-muted">Allocated Date:</span>
@@ -932,6 +975,17 @@
             document.getElementById('d-empName').textContent = data.empName;
             document.getElementById('d-empId').textContent = data.empId;
             document.getElementById('d-date').textContent = data.date;
+
+            const entityDrawer = document.getElementById('d-entity-drawer');
+            if (data.entity === 'Aascent') {
+                entityDrawer.innerHTML = '<span class="entity-tag tag-aascent">Aascent InfoSolutions</span>';
+            } else if (data.entity === 'Aaroha') {
+                entityDrawer.innerHTML = '<span class="entity-tag tag-aaroha">Aaroha InfoSolutions</span>';
+            } else if (data.entity === 'External') {
+                entityDrawer.innerHTML = '<span class="entity-tag tag-external">Professional / Consultant</span>';
+            } else {
+                entityDrawer.innerHTML = '';
+            }
 
             // New Fields
             document.getElementById('d-mouse').textContent = data.mouse || 'N/A';
