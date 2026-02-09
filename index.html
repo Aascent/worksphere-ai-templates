@@ -1158,9 +1158,8 @@
             </div>
 
             <div class="d-grid gap-2 mb-4">
-                <button class="btn btn-outline-primary" id="btn-action">
-                    <i class="bi bi-arrow-left-right me-2"></i> Reassign Asset
-                </button>
+                <button class="btn btn-primary" id="btn-action"></button>
+                <button class="btn btn-danger fw-bold" id="btn-secondary" style="display: none;"></button>
             </div>
 
             <h6 class="text-uppercase text-muted fw-bold small mb-3">Technical Specifications</h6>
@@ -1584,8 +1583,10 @@
             const badgeContainer = document.getElementById('d-status-badge');
             const actionBtn = document.getElementById('btn-action');
 
+            const secondaryBtn = document.getElementById('btn-secondary');
+            secondaryBtn.style.display = 'none'; // Default hidden
+
             if (data.status === 'Available') {
-                badgeContainer.innerHTML = `<span class="badge badge-available fs-6">Available</span>`;
                 actionBtn.innerHTML = `<i class="bi bi-person-plus me-2"></i> Assign to Employee`;
                 actionBtn.className = 'btn btn-primary w-100 fw-bold';
                 actionBtn.onclick = () => {
@@ -1596,35 +1597,70 @@
                     modal.show();
                 };
             } else if (data.status === 'Allocated') {
-                badgeContainer.innerHTML = `<span class="badge badge-allocated fs-6">Allocated</span> <i class="bi bi-patch-check-fill text-white ms-1" style="font-size: 0.8rem;"></i>`;
                 actionBtn.innerHTML = `<i class="bi bi-arrow-left-right me-2"></i> Reassign Asset`;
                 actionBtn.className = 'btn btn-outline-primary w-100 fw-bold';
-                actionBtn.onclick = null; // Add reassignment logic later
+                actionBtn.onclick = () => {
+                    document.getElementById('assign-modal-title').textContent = "Reassign Asset";
+                    document.getElementById('assign-title').textContent = data.title;
+                    document.getElementById('assign-serial').textContent = `SN: ${data.serial}`;
+                    document.getElementById('assign-mouse-label').textContent = data.mouse !== 'N/A' ? data.mouse : 'Wireless Mouse';
+                    const modal = new bootstrap.Modal(document.getElementById('assignModal'));
+                    modal.show();
+                };
+
+                secondaryBtn.style.display = 'block';
+                secondaryBtn.innerHTML = `<i class="bi bi-box-arrow-in-down me-2"></i> Deallocate / Return to Stock`;
+                secondaryBtn.onclick = () => {
+                    document.getElementById('confirm-title').textContent = "Confirm Deallocation";
+                    document.getElementById('confirm-message').textContent = `Are you sure you want to deallocate ${data.title}? The asset status will be set back to Available.`;
+                    const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+                    modal.show();
+                };
+            } else if (data.status === 'Pending Ack.') {
+                actionBtn.innerHTML = '<i class="bi bi-envelope-paper me-2"></i> Resend Email';
+                actionBtn.className = 'btn btn-warning w-100 text-white fw-bold';
+            } else if (data.status === 'Under Repair') {
+                actionBtn.innerHTML = '<i class="bi bi-tools me-2"></i> Update Service Status';
+                actionBtn.className = 'btn btn-outline-secondary w-100 fw-bold';
+            } else if (data.status === 'Damaged') {
+                actionBtn.innerHTML = '<i class="bi bi-shield-exclamation me-2"></i> Report Assessment';
+                actionBtn.className = 'btn btn-danger w-100 fw-bold';
+            } else if (data.status === 'Retired') {
+                actionBtn.innerHTML = '<i class="bi bi-trash me-2"></i> Disposal Record';
+                actionBtn.className = 'btn btn-dark w-100 fw-bold';
+            } else {
+                actionBtn.innerHTML = `<i class="bi bi-person-plus me-2"></i> Assign Asset`;
+                actionBtn.className = 'btn btn-primary w-100 fw-bold';
+            }
+
+            // Handle Badge specifically
+            if (data.status === 'Allocated') {
+                badgeContainer.innerHTML = `<span class="badge badge-allocated fs-6">Allocated</span> <i class="bi bi-patch-check-fill text-white ms-1" style="font-size: 0.8rem;"></i>`;
+            } else if (data.status === 'Available') {
+                badgeContainer.innerHTML = `<span class="badge badge-available fs-6">Available</span>`;
             } else if (data.status === 'Pending Ack.') {
                 badgeContainer.innerHTML = '<span class="badge badge-waiting fs-6">Pending Acknowledgement</span>';
-                actionBtn.innerHTML = '<i class="bi bi-envelope-paper me-2"></i> Resend Email';
-                actionBtn.className = 'btn btn-warning w-100 text-white';
             } else if (data.status === 'Under Repair') {
                 badgeContainer.innerHTML = '<span class="badge badge-repair fs-6">Under Repair</span>';
-                actionBtn.innerHTML = '<i class="bi bi-tools me-2"></i> Update Service Status';
-                actionBtn.className = 'btn btn-outline-secondary w-100';
             } else if (data.status === 'Damaged') {
                 badgeContainer.innerHTML = '<span class="badge badge-damaged fs-6">Damaged</span>';
-                actionBtn.innerHTML = '<i class="bi bi-shield-exclamation me-2"></i> Report Assessment';
-                actionBtn.className = 'btn btn-danger w-100';
             } else if (data.status === 'Retired') {
                 badgeContainer.innerHTML = '<span class="badge badge-retired fs-6">Retired</span>';
-                actionBtn.innerHTML = '<i class="bi bi-trash me-2"></i> Disposal Record';
-                actionBtn.className = 'btn btn-dark w-100';
-            } else {
-                badgeContainer.innerHTML = '<span class="badge badge-available fs-6">Available</span>';
-                actionBtn.innerHTML = '<i class="bi bi-person-plus me-2"></i> Assign to Employee';
-                actionBtn.className = 'btn btn-primary w-100';
             }
 
             // Show Drawer
             document.getElementById('drawer').classList.add('active');
             document.getElementById('overlay').classList.add('active');
+        }
+
+        function deallocateAsset() {
+            const modalEl = document.getElementById('confirmModal');
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            if (modal) modal.hide();
+
+            closeDrawer();
+            showToast("Asset deallocated successfully. Returning to stock.");
+            setTimeout(() => location.reload(), 1200);
         }
 
 
@@ -1753,7 +1789,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
                 <div class="modal-header border-0 pb-0 px-4 pt-4">
-                    <h5 class="modal-title fw-bold">Assign Asset</h5>
+                    <h5 class="modal-title fw-bold" id="assign-modal-title">Assign Asset</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
