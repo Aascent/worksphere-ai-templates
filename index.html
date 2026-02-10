@@ -1,0 +1,2110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkSphare AI | Asset Command Center</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Palette inspired by User Reference Image */
+            --primary: #8D321F;
+            /* Terracotta/Reddish-Brown */
+            --primary-hover: #722819;
+            --secondary: #1FB5FF;
+            /* Cyan/Light Blue */
+            --bg-body: #F8F9FD;
+            /* Very light cool grey */
+            --bg-surface: #FFFFFF;
+            --sidebar-bg: #FFFFFF;
+            --text-main: #374151;
+            --text-muted: #626973;
+            --border-color: #F1F3F5;
+
+            /* Status Mapping from Image */
+            --status-approved-bg: #8D321F;
+            --status-approved-text: #FFFFFF;
+            --status-pending-bg: #1FB5FF;
+            --status-pending-text: #FFFFFF;
+            --status-waiting-bg: #F59E0B;
+            /* Amber for waiting */
+            --status-waiting-text: #FFFFFF;
+            --status-repair-bg: #6366F1;
+            /* Indigo for Repair */
+            --status-damaged-bg: #F43F5E;
+            /* Rose for Damaged */
+            --status-retired-bg: #475569;
+            /* Slate for Retired */
+            --badge-date-border: #8D321F;
+        }
+
+        /* Aggressive Scrollbar Hiding */
+        html,
+        body {
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            overflow: -moz-scrollbars-none;
+        }
+
+        html::-webkit-scrollbar,
+        body::-webkit-scrollbar,
+        .drawer::-webkit-scrollbar,
+        .table-container::-webkit-scrollbar,
+        *::-webkit-scrollbar {
+            display: none !important;
+            /* Chrome, Safari, Opera */
+            width: 0 !important;
+            height: 0 !important;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* --- Sidebar Navigation --- */
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            color: var(--text-main);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .sidebar-brand {
+            padding: 2rem 1.5rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-main);
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            padding: 0.75rem 1.5rem;
+            margin: 0.25rem 1rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+            border-radius: 50px;
+            /* Pillow shape from image */
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+            background: transparent;
+        }
+
+        .nav-link.active {
+            background: var(--primary) !important;
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(141, 50, 31, 0.25);
+        }
+
+        /* --- AI Logo Enhancements --- */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 2rem 1.5rem;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: #fff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%) rotate(45deg);
+            }
+
+            100% {
+                transform: translateX(100%) rotate(45deg);
+            }
+        }
+
+        .logo-text {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.01em;
+        }
+
+        .ai-badge {
+            background: var(--secondary);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 900;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 4px;
+            text-transform: uppercase;
+            vertical-align: middle;
+        }
+
+        /* --- Main Content Area --- */
+        .main-content {
+            margin-left: 260px;
+            padding: 2rem;
+            max-width: 1600px;
+        }
+
+        /* --- KPI Cards --- */
+        .kpi-card {
+            background: var(--bg-surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .kpi-card.interactive:hover {
+            border-color: #F59E0B !important;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.1);
+        }
+
+        .kpi-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* --- Data Table --- */
+        .table-container {
+            background: var(--bg-surface);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .table thead th {
+            background: #F9FAFB;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .table tbody td {
+            padding: 1rem 1.5rem;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--border-color);
+            color: #374151;
+            font-size: 0.9rem;
+        }
+
+        .table tbody tr {
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8fafc;
+            border-left-color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        /* --- Custom Data Styling --- */
+        .serial-tag {
+            font-family: 'JetBrains Mono', 'Roboto Mono', monospace;
+            font-size: 0.75rem;
+            background: #f1f5f9;
+            padding: 4px 10px;
+            border-radius: 6px;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .serial-tag:hover {
+            background: #e2e8f0;
+            color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        .copy-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1e293b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            z-index: 9999;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .copy-toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .specs-snippet {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            margin-top: 2px;
+            font-weight: 500;
+        }
+
+        /* --- Badges --- */
+        .badge-status {
+            padding: 0.35em 0.8em;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.75rem;
+        }
+
+        .badge-waiting {
+            background: #FFFBEB;
+            color: #B45309;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: 1px solid #FDE68A;
+        }
+
+        .badge-allocated {
+            background: #EFF6FF;
+            color: #2563EB;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: 1px solid #BFDBFE;
+        }
+
+        .badge-available {
+            background: #F0FDF4;
+            color: #16A34A;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: 1px solid #BBF7D0;
+        }
+
+        .badge-repair {
+            background: #EEF2FF;
+            color: #4F46E5;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: 1px solid #C7D2FE;
+        }
+
+        .badge-damaged {
+            background: #FEF2F2;
+            color: #DC2626;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: 1px solid #FECACA;
+        }
+
+        .badge-retired {
+            background: #F8FAFC;
+            color: #475569;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: 1px solid #E2E8F0;
+        }
+
+
+        /* --- WhatsApp Ticks --- */
+        .wa-tick {
+            font-size: 1.25rem;
+            vertical-align: middle;
+            line-height: 1;
+        }
+
+        .tick-grey {
+            color: #94a3b8;
+        }
+
+        .tick-blue {
+            color: #3B82F6;
+        }
+
+        .wa-tick-container {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+
+        .badge-date {
+            background: #FFFFFF;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 2px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-flex;
+            justify-content: center;
+            min-width: 110px;
+            font-family: 'JetBrains Mono', 'Roboto Mono', monospace;
+        }
+
+        .badge-warranty-near {
+            background: #FFFBEB;
+            color: #B45309;
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 50px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            border: 1px solid #FDE68A;
+            margin-top: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 110px;
+            text-transform: uppercase;
+        }
+
+        .badge-warranty-near:hover {
+            background: #FEF3C7;
+            transform: translateY(-1px);
+        }
+
+        .warranty-progress-container {
+            height: 8px;
+            background: #E5E7EB;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .warranty-progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease-out;
+        }
+
+        .warranty-status-text {
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .kpi-card.interactive {
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card.interactive:active {
+            transform: scale(0.98);
+        }
+
+        .kpi-card.interactive::after {
+            content: 'Click to filter';
+            position: absolute;
+            bottom: 0px;
+            left: 0;
+            right: 0;
+            background: rgba(180, 83, 9, 0.05);
+            font-size: 0.65rem;
+            text-align: center;
+            padding: 2px 0;
+            color: #B45309;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .kpi-card.interactive:hover::after {
+            opacity: 1;
+        }
+
+        /* --- Avatars & Entities --- */
+        .avatar-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border: 2px solid white;
+        }
+
+        .avatar-aascent {
+            background: linear-gradient(135deg, #8D321F, #b44a34);
+        }
+
+        .avatar-aaroha {
+            background: linear-gradient(135deg, #059669, #10b981);
+        }
+
+        .avatar-external {
+            background: linear-gradient(135deg, #7c3aed, #a78bfa);
+        }
+
+        .avatar-unassigned {
+            background: #f1f5f9;
+            color: #94a3b8;
+            border: 1px dashed #cbd5e1;
+            box-shadow: none;
+        }
+
+        .entity-tag {
+            font-size: 0.6rem;
+            font-weight: 800;
+            padding: 1px 6px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            display: inline-block;
+        }
+
+        .tag-aascent {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .tag-aaroha {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .tag-external {
+            background: #f3e8ff;
+            color: #6b21a8;
+        }
+
+
+        /* --- Slide-Over Drawer --- */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1040;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            backdrop-filter: blur(2px);
+        }
+
+        .drawer {
+            position: fixed;
+            top: 0;
+            right: -600px;
+            width: 500px;
+            height: 100vh;
+            background: white;
+            z-index: 1050;
+            box-shadow: -10px 0 25px rgba(0, 0, 0, 0.1);
+            transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .drawer.active {
+            right: 0;
+        }
+
+        .drawer-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .drawer-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            background: #fff;
+            position: sticky;
+            top: 0;
+        }
+
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 0.9rem;
+        }
+
+        .spec-label {
+            color: var(--text-muted);
+        }
+
+        .spec-value {
+            font-weight: 500;
+            text-align: right;
+            max-width: 60%;
+        }
+
+        /* --- Modal Customization --- */
+        .modal-content {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem 2rem;
+        }
+
+        .modal-title {
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .form-section-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 1.25rem;
+            margin-top: 1.5rem;
+        }
+
+        .form-section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .form-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #D1D5DB;
+            padding: 0.625rem 0.875rem;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .form-select {
+            border-radius: 8px;
+            border: 1px solid #D1D5DB;
+            padding: 0.625rem 2.5rem 0.625rem 0.875rem;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .btn-save {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            padding: 0.625rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            transition: opacity 0.2s;
+        }
+
+        .btn-save:hover {
+            opacity: 0.9;
+        }
+
+        .btn-cancel {
+            background-color: #F3F4F6;
+            color: #4B5563;
+            font-weight: 600;
+            padding: 0.625rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            margin-right: 0.75rem;
+        }
+
+        .btn-cancel:hover {
+            background-color: #E5E7EB;
+        }
+
+        /* Float the close button precisely */
+        .btn-close-custom {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: #9CA3AF;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+        /* Assignment Modal Styles */
+        .assignment-option {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 10px;
+        }
+
+        .assignment-option:hover {
+            border-color: var(--primary);
+            background: #f8fafc;
+        }
+
+        .check-item {
+            padding: 8px 12px;
+            background: #f1f5f9;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="sidebar">
+        <div class="logo-container">
+            <div class="logo-icon">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGrad" x1="50" y1="0" x2="50" y2="100" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#E11D00" />
+                            <stop offset="1" stop-color="#8D321F" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M50 2L70 42H30L50 2Z" fill="url(#logoGrad)" />
+                    <path d="M28 47L72 47L80 65H20L28 47Z" fill="url(#logoGrad)" />
+                    <path d="M18 70L82 70L95 98H5L18 70Z" fill="url(#logoGrad)" />
+                </svg>
+            </div>
+            <div>
+                <span class="logo-text">WorkSphare<span class="ai-badge">AI</span></span>
+            </div>
+        </div>
+        <div class="nav flex-column mt-3">
+            <a href="#" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
+            <a href="#" class="nav-link active"><i class="bi bi-laptop"></i> Assets Inventory</a>
+            <a href="#" class="nav-link"><i class="bi bi-people"></i> Employees</a>
+            <a href="#" class="nav-link"><i class="bi bi-file-earmark-text"></i> Reports</a>
+        </div>
+        <div class="mt-auto p-4">
+            <div class="d-flex align-items-center gap-3 p-2 rounded-3 bg-light">
+                <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center text-white"
+                    style="width: 36px; height: 36px; font-weight: 600;">JD</div>
+                <div style="line-height: 1.2;">
+                    <small class="d-block fw-bold text-dark">John Doe</small>
+                    <small class="text-muted" style="font-size: 0.75rem;">IT Admin</small>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h2 class="fw-bold mb-1">Asset Inventory</h2>
+                <p class="text-muted mb-0">Manage allocations, track hardware, and view availability.</p>
+            </div>
+            <button class="btn btn-primary px-4 py-2 fw-medium shadow-sm" style="border:none;" data-bs-toggle="modal"
+                data-bs-target="#addAssetModal">
+                <i class="bi bi-plus-lg me-2"></i> Add New Asset
+            </button>
+        </div>
+
+        <div class="row g-3 mb-5">
+            <!-- Total Assets -->
+            <div class="col-xxl col-xl-2 col-md-4 col-sm-6">
+                <div class="kpi-card h-100">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-muted text-uppercase small fw-bold mb-1">Total</p>
+                            <h2 class="fw-bold mb-0">142</h2>
+                        </div>
+                        <div class="kpi-icon bg-light text-primary"><i class="bi bi-pc-display-horizontal"></i></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Allocated -->
+            <div class="col-xxl col-xl-2 col-md-4 col-sm-6">
+                <div class="kpi-card h-100">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-muted text-uppercase small fw-bold mb-1">Allocated</p>
+                            <h2 class="fw-bold mb-0 text-warning">98</h2>
+                        </div>
+                        <div class="kpi-icon bg-light text-warning"><i class="bi bi-person-check"></i></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Available -->
+            <div class="col-xxl col-xl-2 col-md-4 col-sm-6">
+                <div class="kpi-card h-100">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-muted text-uppercase small fw-bold mb-1">Available</p>
+                            <h2 class="fw-bold mb-0 text-success">44</h2>
+                        </div>
+                        <div class="kpi-icon bg-light text-success"><i class="bi bi-check-circle"></i></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Under Repair -->
+            <div class="col-xxl col-xl-2 col-md-4 col-sm-6">
+                <div class="kpi-card h-100">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-muted text-uppercase small fw-bold mb-1">Repair</p>
+                            <h2 class="fw-bold mb-0" style="color: #6366F1;">12</h2>
+                        </div>
+                        <div class="kpi-icon bg-light" style="color: #6366F1;"><i class="bi bi-tools"></i></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Damaged -->
+            <div class="col-xxl col-xl-2 col-md-4 col-sm-6">
+                <div class="kpi-card h-100">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-muted text-uppercase small fw-bold mb-1">Damaged</p>
+                            <h2 class="fw-bold mb-0" style="color: #F43F5E;">05</h2>
+                        </div>
+                        <div class="kpi-icon bg-light" style="color: #F43F5E;"><i class="bi bi-exclamation-octagon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Warranty Expiry -->
+            <div class="col-xxl col-xl-2 col-md-4 col-sm-6">
+                <div class="kpi-card h-100 border-warning border-opacity-50 interactive" style="background: #FFFBEB;"
+                    onclick="filterByWarranty()">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-warning text-uppercase small fw-bold mb-1">Warranty</p>
+                            <h2 class="fw-bold mb-0" style="color: #B45309;">03</h2>
+                        </div>
+                        <div class="kpi-icon bg-white text-warning shadow-sm"><i class="bi bi-shield-exclamation"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex gap-3 mb-4">
+            <div class="input-group" style="max-width: 300px;">
+                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                <input type="text" id="searchInput" class="form-control border-start-0 ps-0"
+                    placeholder="Search serial, model, or employee..." onkeyup="filterTable()">
+            </div>
+            <select id="categoryFilter" class="form-select w-auto text-muted" style="min-width: 200px;"
+                onchange="filterTable()">
+                <option value="">Filter by Category</option>
+                <option value="Laptop">Laptop</option>
+                <option value="Desktop">Desktop / Mac Mini</option>
+                <option value="Mobile">Mobile (Android/iOS)</option>
+                <option value="Peripherals">Peripherals (Mouse/Keyboard)</option>
+                <option value="Power">Power (Charger/Adapter)</option>
+                <option value="Connectivity">Connectivity (Cable/Hub)</option>
+                <option value="Storage">Storage (SSD/HDD)</option>
+                <option value="Bags">Bags / Cases</option>
+                <option value="Other">Other</option>
+            </select>
+            <select id="statusFilter" class="form-select w-auto text-muted" style="min-width: 160px;"
+                onchange="filterTable()">
+                <option value="">Filter by Status</option>
+                <option value="Available">Available</option>
+                <option value="Allocated">Allocated</option>
+                <option value="Under Repair">Under Repair</option>
+                <option value="Damaged">Damaged</option>
+                <option value="Retired">Retired</option>
+                <option value="Pending Ack.">Pending Ack.</option>
+            </select>
+            <select id="entityFilter" class="form-select w-auto text-muted" style="min-width: 160px;"
+                onchange="filterTable()">
+                <option value="">Filter by Entity</option>
+                <option value="Aascent">Aascent</option>
+                <option value="Aaroha">Aaroha</option>
+                <option value="External">External</option>
+            </select>
+        </div>
+
+        <div class="table-container">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">Asset Details</th>
+                        <th>Purchase Date</th>
+                        <th>Serial No.</th>
+                        <th>Status</th>
+                        <th>Assigned To</th>
+                        <th class="text-end pe-4">Last Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="asset-row" data-category="Laptop" data-status="Allocated" data-entity="Aascent" onclick="openDrawer({
+                        title: 'HP Laptop 15s-du2077tu',
+                        status: 'Allocated',
+                        serial: 'CND026CQNP',
+                        empName: 'Sachin Modh',
+                        empId: 'AI-002',
+                        entity: 'Aascent',
+                        specs: 'Intel Core i5-1035G1, 16.0 GB RAM',
+                        os: 'Windows 11 Home',
+                        date: '16-07-2020',
+                        warranty: '16-07-2023',
+                        mouse: '2237LZD2J518 (Logitech)',
+                        headphone: '131000158 (Sennheiser)',
+                        charger: 'WHHRHA1RDST34',
+                        others: 'Laptop Bag, Mouse Pad'
+                    })">
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded p-2 me-3 text-primary"><i class="bi bi-laptop fs-5"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark">HP Laptop 15s</div>
+                                    <div class="specs-snippet">i5-1035G1 • 16GB RAM</div>
+                                    <div class="small text-muted mt-1" style="font-size: 0.7rem;">ID: AST-771</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="font-monospace text-muted">
+                            <span class="badge-date">16/07/2020</span>
+                        </td>
+                        <td class="font-monospace small text-muted">
+                            <span class="serial-tag" onclick="copyToClipboard('CND026CQNP', event)">CND026CQNP <i
+                                    class="bi bi-copy small opacity-50"></i></span>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge badge-allocated">Allocated</span>
+                                <div class="wa-tick-container">
+                                    <i class="bi bi-check-all wa-tick tick-blue" title="Verified by Employee"></i>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle avatar-aascent me-3">SM</div>
+                                <div>
+                                    <div class="fw-bold text-dark small" style="line-height: 1.2;">Sachin Modh</div>
+                                    <div class="d-flex align-items-center gap-2 mt-1">
+                                        <span class="entity-tag tag-aascent">Aascent</span>
+                                        <span class="text-muted" style="font-size: 0.65rem;"><span class="fw-bold"
+                                                style="color: var(--primary);">AI</span>-002</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-end pe-4 text-muted small">2 days ago</td>
+                    </tr>
+
+                    <tr class="asset-row" data-category="Laptop" data-status="Pending Ack." data-entity="External"
+                        onclick="openDrawer({
+                        title: 'Dell Inspiron 15 300',
+                        status: 'Pending Ack.',
+                        serial: '4G2LYR3',
+                        empName: 'Nayan Patel',
+                        empId: 'EXT-NP',
+                        entity: 'External',
+                        specs: '11th Gen Intel i5-1135G7, 16.0 GB RAM',
+                        os: 'Windows 11 [24H2]',
+                        date: '24-11-2025',
+                        warranty: '24-11-2025',
+                        mouse: 'Wireless Mouse (Included)',
+                        headphone: 'N/A',
+                        charger: 'P112F301 (Reg Model)',
+                        others: 'Laptop Bag'
+                    })">
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded p-2 me-3 text-primary"><i class="bi bi-laptop fs-5"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark">Dell Inspiron 15</div>
+                                    <div class="specs-snippet">i5-1135G7 • 16GB RAM</div>
+                                    <div class="small text-muted mt-1" style="font-size: 0.7rem;">ID: AST-892</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column align-items-center">
+                                <span class="badge-date">24/11/2025</span>
+                                <span class="badge-warranty-near"><i class="bi bi-clock-history"></i> EXPIRING
+                                    SOON</span>
+                            </div>
+                        </td>
+                        <td class="font-monospace small text-muted">
+                            <span class="serial-tag" onclick="copyToClipboard('4G2LYR3', event)">4G2LYR3 <i
+                                    class="bi bi-copy small opacity-50"></i></span>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge badge-waiting">Pending Ack.</span>
+                                <i class="bi bi-check wa-tick tick-grey" title="Email Sent"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle avatar-external me-3">NP</div>
+                                <div>
+                                    <div class="fw-bold text-dark small" style="line-height: 1.2;">Nayan Patel</div>
+                                    <div class="d-flex align-items-center gap-2 mt-1">
+                                        <span class="entity-tag tag-external">External</span>
+                                        <span class="text-muted" style="font-size: 0.65rem;"><span class="fw-bold"
+                                                style="color: var(--secondary);">EXT</span>-NP</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-end pe-4 text-muted small">Just now</td>
+                    </tr>
+
+                    <tr class="asset-row" data-category="Desktop" data-status="Allocated" data-entity="Aaroha" onclick="openDrawer({
+                        title: 'Mac Mini Box (MGNR3HNIA)',
+                        status: 'Allocated',
+                        serial: 'C07G1LGQ6NV',
+                        empName: 'Yash Vithalani',
+                        empId: 'ARI-14',
+                        entity: 'Aaroha',
+                        specs: 'Apple M1, 8 GB RAM',
+                        os: 'macOS Monterey',
+                        date: '18-04-2023',
+                        mouse: 'N/A',
+                        keyboard: 'Apple Magic Keyboard (SN: 9812739)',
+                        headphone: 'N/A',
+                        storage: 'Samsung T7 500GB SSD',
+                        otg: 'T-Type USB-C Hub (v3.0)',
+                        charger: 'ADS-26FSG-12',
+                        others: 'LG Monitor, HDMI Cable'
+                    })">
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded p-2 me-3 text-primary"><i class="bi bi-gpu-card fs-5"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark">Mac Mini Box</div>
+                                    <div class="specs-snippet">Apple M1 • 8GB RAM</div>
+                                    <div class="small text-muted mt-1" style="font-size: 0.7rem;">ID: AST-104</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="font-monospace text-muted">
+                            <span class="badge-date">18/04/2023</span>
+                        </td>
+                        <td class="font-monospace small text-muted">
+                            <span class="serial-tag" onclick="copyToClipboard('C07G1LGQ6NV', event)">C07G1LGQ6NV <i
+                                    class="bi bi-copy small opacity-50"></i></span>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge badge-allocated">Allocated</span>
+                                <div class="wa-tick-container">
+                                    <i class="bi bi-check-all wa-tick tick-blue" title="Verified by Employee"></i>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle avatar-aaroha me-3">YV</div>
+                                <div>
+                                    <div class="fw-bold text-dark small" style="line-height: 1.2;">Yash Vithalani</div>
+                                    <div class="d-flex align-items-center gap-2 mt-1">
+                                        <span class="entity-tag tag-aaroha">Aaroha</span>
+                                        <span class="text-muted" style="font-size: 0.65rem;"><span class="fw-bold"
+                                                style="color: #059669;">ARI</span>-14</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-end pe-4 text-muted small">3 weeks ago</td>
+                    </tr>
+
+                    <tr class="asset-row" data-category="Laptop" data-status="Allocated" data-entity="Aaroha" onclick="openDrawer({
+                        title: 'HP Laptop 15s-du3xxxx',
+                        status: 'Allocated',
+                        serial: 'CND1504BR9',
+                        empName: 'Ashok Mamnani',
+                        empId: 'ARI-06',
+                        entity: 'Aaroha',
+                        specs: '11th Gen Intel i5-1135G7, 16.0 GB RAM',
+                        os: 'Windows 11 Home [24H2]',
+                        date: '12-05-2021',
+                        mouse: 'Portronics Toad One (2505168214874)',
+                        headphone: 'DK-2750',
+                        charger: 'WHHRH0A5RF6B2Q',
+                        others: 'Laptop Bag'
+                    })">
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded p-2 me-3 text-primary"><i class="bi bi-laptop fs-5"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark">HP Laptop 15s</div>
+                                    <div class="specs-snippet">i5-1135G7 • 16GB RAM</div>
+                                    <div class="small text-muted mt-1" style="font-size: 0.7rem;">ID: AST-150</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="font-monospace text-muted">
+                            <span class="badge-date">12/05/2021</span>
+                        </td>
+                        <td class="font-monospace small text-muted">
+                            <span class="serial-tag" onclick="copyToClipboard('CND1504BR9', event)">CND1504BR9 <i
+                                    class="bi bi-copy small opacity-50"></i></span>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge badge-allocated">Allocated</span>
+                                <div class="wa-tick-container">
+                                    <i class="bi bi-check-all wa-tick tick-blue" title="Verified by Employee"></i>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle avatar-aaroha me-3">AM</div>
+                                <div>
+                                    <div class="fw-bold text-dark small" style="line-height: 1.2;">Ashok Mamnani</div>
+                                    <div class="d-flex align-items-center gap-2 mt-1">
+                                        <span class="entity-tag tag-aaroha">Aaroha</span>
+                                        <span class="text-muted" style="font-size: 0.65rem;"><span class="fw-bold"
+                                                style="color: #059669;">ARI</span>-06</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-end pe-4 text-muted small">1 month ago</td>
+                    </tr>
+
+                    <tr class="asset-row" data-category="Laptop" data-status="Available" data-entity="None" onclick="openDrawer({
+                        title: 'HP Pavillion Power',
+                        status: 'Available',
+                        serial: '5CD7317YGO',
+                        empName: 'N/A',
+                        empId: 'N/A',
+                        specs: 'Intel Core i5-1135G7, 8GB RAM',
+                        os: 'Windows 11 Home',
+                        date: 'N/A',
+                        mouse: 'N/A',
+                        headphone: 'N/A',
+                        charger: 'N/A',
+                        others: 'N/A'
+                    })">
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded p-2 me-3 text-primary"><i class="bi bi-laptop fs-5"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark">HP Pavillion Power</div>
+                                    <div class="specs-snippet">i5-1135G7 • 8GB RAM</div>
+                                    <div class="small text-muted mt-1" style="font-size: 0.7rem;">ID: AST-004</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="font-monospace text-muted">
+                            <span class="badge-date">01/12/2023</span>
+                        </td>
+                        <td class="font-monospace small text-muted">
+                            <span class="serial-tag" onclick="copyToClipboard('5CD7317YGO', event)">5CD7317YGO <i
+                                    class="bi bi-copy small opacity-50"></i></span>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge badge-available">Available</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle avatar-unassigned me-3">
+                                    <i class="bi bi-box-seam" style="font-size: 0.8rem;"></i>
+                                </div>
+                                <div class="fw-bold text-muted small">Unassigned</div>
+                            </div>
+                        </td>
+                        <td class="text-end pe-4 text-muted small">1 week ago</td>
+                    </tr>
+
+                    <tr class="asset-row" data-category="Laptop" data-status="Pending Ack." data-entity="Aascent"
+                        onclick="openDrawer({
+                        title: 'Apple MacBook Pro M3',
+                        status: 'Pending Ack.',
+                        serial: 'SC02FGJ98L0',
+                        empName: 'Priyanka Sharma',
+                        empId: 'AI-104',
+                        entity: 'Aascent',
+                        specs: 'Apple M3 Pro, 18GB RAM',
+                        os: 'macOS Sequoia',
+                        date: '10-02-2026',
+                        warranty: '10-02-2029',
+                        mouse: 'Apple Magic Mouse',
+                        charger: '96W USB-C Adapter',
+                        others: 'Sleevecase'
+                    })">
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded p-2 me-3 text-primary"><i class="bi bi-laptop fs-5"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark">MacBook Pro M3</div>
+                                    <div class="specs-snippet">M3 Pro • 18GB RAM</div>
+                                    <div class="small text-muted mt-1" style="font-size: 0.7rem;">ID: AST-912</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="font-monospace text-muted">
+                            <span class="badge-date">10/02/2026</span>
+                        </td>
+                        <td class="font-monospace small text-muted">
+                            <span class="serial-tag" onclick="copyToClipboard('SC02FGJ98L0', event)">SC02FGJ98L0 <i
+                                    class="bi bi-copy small opacity-50"></i></span>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge badge-waiting">Pending Ack.</span>
+                                <i class="bi bi-check wa-tick tick-grey" title="Email Sent"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle avatar-aascent me-3">PS</div>
+                                <div>
+                                    <div class="fw-bold text-dark small" style="line-height: 1.2;">Priyanka Sharma</div>
+                                    <div class="d-flex align-items-center gap-2 mt-1">
+                                        <span class="entity-tag tag-aascent">Aascent</span>
+                                        <span class="text-muted" style="font-size: 0.65rem;"><span class="fw-bold"
+                                                style="color: var(--primary);">AI</span>-104</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-end pe-4 text-muted small">Just now</td>
+                    </tr>
+
+                    <tr class="asset-row" data-category="Desktop" data-status="Allocated" data-entity="Aascent" onclick="openDrawer({
+                        title: 'Dell OptiPlex 7000',
+                        status: 'Allocated',
+                        serial: 'CZ098L12X',
+                        empName: 'Rahul Mehta',
+                        empId: 'AI-201',
+                        entity: 'Aascent',
+                        specs: 'Intel Core i7-12700, 32GB RAM',
+                        os: 'Windows 11 Pro',
+                        date: '05-01-2024',
+                        keyboard: 'Dell KB216 Keyboard',
+                        mouse: 'Dell MS116 Mouse',
+                        others: '2x 27-inch Dell Monitors'
+                    })">
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded p-2 me-3 text-primary"><i class="bi bi-display fs-5"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark">Dell OptiPlex 7000</div>
+                                    <div class="specs-snippet">i7-12700 • 32GB RAM</div>
+                                    <div class="small text-muted mt-1" style="font-size: 0.7rem;">ID: AST-605</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="font-monospace text-muted">
+                            <span class="badge-date">05/01/2024</span>
+                        </td>
+                        <td class="font-monospace small text-muted">
+                            <span class="serial-tag" onclick="copyToClipboard('CZ098L12X', event)">CZ098L12X <i
+                                    class="bi bi-copy small opacity-50"></i></span>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge badge-allocated">Allocated</span>
+                                <div class="wa-tick-container">
+                                    <i class="bi bi-check-all wa-tick tick-blue" title="Verified by Employee"></i>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle avatar-aascent me-3">RM</div>
+                                <div>
+                                    <div class="fw-bold text-dark small" style="line-height: 1.2;">Rahul Mehta</div>
+                                    <div class="d-flex align-items-center gap-2 mt-1">
+                                        <span class="entity-tag tag-aascent">Aascent</span>
+                                        <span class="text-muted" style="font-size: 0.65rem;"><span class="fw-bold"
+                                                style="color: var(--primary);">AI</span>-201</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-end pe-4 text-muted small">1 hour ago</td>
+                    </tr>
+
+                    <tr class="asset-row" data-category="Peripheral" data-status="Retired" data-entity="None" onclick="openDrawer({
+                        title: 'Dell 24 Monitor',
+                        status: 'Retired',
+                        serial: 'CN-0FY9V2-74445',
+                        empName: 'N/A',
+                        empId: 'N/A',
+                        specs: '24-inch FHD, 60Hz',
+                        date: '15-05-2018',
+                        others: 'HDMI Cable, Stand'
+                    })">
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded p-2 me-3 text-secondary"><i class="bi bi-display fs-5"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark">Dell 24 Monitor</div>
+                                    <div class="specs-snippet">P2419H • 24" FHD</div>
+                                    <div class="small text-muted mt-1" style="font-size: 0.7rem;">ID: AST-009</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="font-monospace text-muted">
+                            <span class="badge-date">15/05/2018</span>
+                        </td>
+                        <td class="font-monospace small text-muted">
+                            <span class="serial-tag" onclick="copyToClipboard('CN-0FY9V2-74445', event)">CN-0FY9V2-74445
+                                <i class="bi bi-copy small opacity-50"></i></span>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge badge-retired">Retired</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle avatar-unassigned me-3">
+                                    <i class="bi bi-archive" style="font-size: 0.8rem;"></i>
+                                </div>
+                                <div class="fw-bold text-muted small">Scrapped</div>
+                            </div>
+                        </td>
+                        <td class="text-end pe-4 text-muted small">6 months ago</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+    <div class="drawer" id="drawer">
+        <div class="drawer-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold">Asset Details</h5>
+            <button class="btn-close" onclick="closeDrawer()"></button>
+        </div>
+
+        <div class="p-4">
+            <div class="text-center mb-4">
+                <div class="bg-light rounded-3 d-inline-flex p-3 mb-3 text-primary display-4">
+                    <i class="bi bi-laptop"></i>
+                </div>
+                <h4 class="fw-bold mb-1" id="d-title">HP Laptop</h4>
+                <div id="d-status-badge"></div>
+            </div>
+
+            <div class="d-grid gap-2 mb-4">
+                <button class="btn btn-primary" id="btn-action"></button>
+                <button class="btn btn-danger fw-bold" id="btn-secondary" style="display: none;"></button>
+            </div>
+
+            <h6 class="text-uppercase text-muted fw-bold small mb-3">Technical Specifications</h6>
+            <div class="spec-item">
+                <span class="spec-label"><i class="bi bi-key me-2"></i>Serial Number</span>
+                <span class="spec-value serial-tag" id="d-serial"
+                    onclick="copyToClipboard(this.textContent, event)">--</span>
+            </div>
+            <div class="spec-item">
+                <span class="spec-label"><i class="bi bi-windows me-2"></i>Operating System</span>
+                <span class="spec-value" id="d-os">--</span>
+            </div>
+            <div class="spec-item">
+                <span class="spec-label"><i class="bi bi-cpu me-2"></i>Processor/RAM</span>
+                <span class="spec-value" id="d-specs">--</span>
+            </div>
+
+            <h6 class="text-uppercase text-muted fw-bold small mb-3 mt-4">Peripherals & Accessories</h6>
+            <div class="row g-2">
+                <div class="col-6">
+                    <div class="spec-item h-100">
+                        <span class="spec-label">Mouse S/N</span>
+                        <span class="spec-value small" id="d-mouse">--</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="spec-item h-100">
+                        <span class="spec-label">Keyboard S/N</span>
+                        <span class="spec-value small" id="d-keyboard">--</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="spec-item h-100">
+                        <span class="spec-label">Headphones</span>
+                        <span class="spec-value small" id="d-headphone">--</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="spec-item h-100">
+                        <span class="spec-label">Storage (SSD/HDD)</span>
+                        <span class="spec-value small" id="d-storage">--</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="spec-item h-100">
+                        <span class="spec-label">Connectivity (OTG)</span>
+                        <span class="spec-value small" id="d-otg">--</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="spec-item h-100">
+                        <span class="spec-label">Charger/Adapter</span>
+                        <span class="spec-value small" id="d-charger">--</span>
+                    </div>
+                </div>
+            </div>
+            <div class="spec-item mt-3">
+                <div class="d-flex justify-content-between">
+                    <span class="spec-label">Warranty Status</span>
+                    <span class="warranty-status-text" id="d-warranty-label">--</span>
+                </div>
+                <div class="warranty-progress-container">
+                    <div class="warranty-progress-bar" id="d-warranty-progress" style="width: 0%;"></div>
+                </div>
+                <div class="d-flex justify-content-between x-small text-muted mt-1" style="font-size: 0.7rem;">
+                    <span>Expires: <span id="d-warranty-date">--</span></span>
+                    <span id="d-warranty-days">-- days left</span>
+                </div>
+            </div>
+
+            <div class="d-grid mt-3">
+                <button class="btn btn-sm btn-light border text-muted" style="font-size: 0.75rem;">
+                    <i class="bi bi-file-earmark-text me-1"></i> View Warranty Invoice
+                </button>
+            </div>
+            <div class="spec-item mt-2">
+                <span class="spec-label">Other Assets</span>
+                <span class="spec-value small" id="d-others">--</span>
+            </div>
+
+            <h6 class="text-uppercase text-muted fw-bold small mb-3 mt-4">Current Assignment</h6>
+            <div class="p-3 bg-light rounded border">
+                <div class="d-flex align-items-center mb-2">
+                    <i class="bi bi-person-badge text-muted me-2"></i>
+                    <span class="text-muted small">Employee</span>
+                </div>
+                <div class="fw-bold mb-0" id="d-empName">--</div>
+                <div id="d-entity-drawer"></div>
+                <div class="small text-muted mt-1" id="d-empId">--</div>
+                <hr class="my-2">
+                <div class="d-flex justify-content-between small">
+                    <span class="text-muted">Allocated Date:</span>
+                    <span class="fw-medium" id="d-date">--</span>
+                </div>
+            </div>
+
+            <h6 class="text-uppercase text-muted fw-bold small mb-3 mt-4">Activity Log</h6>
+            <div class="border-start border-2 ps-4 ms-2" style="border-color: #E5E7EB !important;">
+                <div class="mb-4 position-relative">
+                    <div class="position-absolute bg-white"
+                        style="left: -33px; top: 0; width: 14px; height: 14px; border-radius: 50%; border: 3px solid var(--primary); z-index: 1;">
+                    </div>
+                    <p class="small mb-0 fw-bold" style="line-height: 1.2;">System Check Passed</p>
+                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">Today, 10:23 AM</p>
+                </div>
+                <div class="mb-0 position-relative">
+                    <div class="position-absolute bg-white"
+                        style="left: -33px; top: 0; width: 14px; height: 14px; border-radius: 50%; border: 3px solid #cbd5e1; z-index: 1;">
+                    </div>
+                    <p class="small mb-0 fw-bold" style="line-height: 1.2;">Asset Profile Updated</p>
+                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">Yesterday, 4:00 PM</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Add New Asset Modal -->
+    <div class="modal fade" id="addAssetModal" tabindex="-1" aria-labelledby="addAssetModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-between align-items-center">
+                    <h5 class="modal-title" id="addAssetModalLabel">Add New Asset</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addAssetForm">
+                        <!-- Basic Information -->
+                        <div class="form-section-title">Basic Information</div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Category</label>
+                                <select id="assetCategory" class="form-select" onchange="toggleFormFields()">
+                                    <option value="Laptop" selected>Laptop</option>
+                                    <option value="Desktop">Desktop / Mac Mini Box</option>
+                                    <option value="Mobile">Mobile (Android / iPhone)</option>
+                                    <option value="Peripheral">Peripheral (Mouse/Keyboard/Pad)</option>
+                                    <option value="Power">Power (Charger / Adapter)</option>
+                                    <option value="Cable">Cable (LAN / HDMI / USB)</option>
+                                    <option value="Storage">Storage (SSD / HDD / Flash)</option>
+                                    <option value="Bag">Laptop Bag</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Brand</label>
+                                <input type="text" class="form-control" placeholder="e.g. HP, Dell, Apple">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Model Name/Number</label>
+                                <input type="text" class="form-control" placeholder="e.g. 15s-du2077tu">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Serial Number <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" placeholder="e.g. CND026CQNP" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Internal Asset Tag</label>
+                                <input type="text" class="form-control" placeholder="e.g. ASSET-2024-001">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Condition</label>
+                                <select class="form-select">
+                                    <option>New</option>
+                                    <option>Used / Good</option>
+                                    <option>Refurbished</option>
+                                    <option>Damaged (For Repair)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Computing Specs (For Laptops/Desktops) -->
+                        <div id="section-computing" class="dynamic-section">
+                            <div class="form-section-title">Computing Specifications</div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Processor (CPU)</label>
+                                    <input type="text" class="form-control" placeholder="e.g. Intel Core i5-1135G7">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">RAM Config</label>
+                                    <select class="form-select">
+                                        <option>8 GB</option>
+                                        <option selected>16 GB</option>
+                                        <option>32 GB</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Primary Storage (SSD/HDD)</label>
+                                    <input type="text" class="form-control" placeholder="e.g. 512GB NVMe SSD">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Hostname / Device Name</label>
+                                    <input type="text" class="form-control" placeholder="e.g. IT-LAPTOP-05">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Operating System</label>
+                                    <input type="text" class="form-control" placeholder="e.g. Windows 11 Pro">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">OS Version</label>
+                                    <input type="text" class="form-control" placeholder="e.g. 24H2">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mobile Specs -->
+                        <div id="section-mobile" class="dynamic-section" style="display: none;">
+                            <div class="form-section-title">Mobile Specifications</div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">IMEI 1 / Primary ID</label>
+                                    <input type="text" class="form-control" placeholder="15-digit IMEI number">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">IMEI 2 (Optional)</label>
+                                    <input type="text" class="form-control" placeholder="Secondary IMEI">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Storage Capacity</label>
+                                    <input type="text" class="form-control" placeholder="e.g. 128GB">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">OS version</label>
+                                    <input type="text" class="form-control" placeholder="e.g. iOS 17.5 / Android 14">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Monitor Specs -->
+                        <div id="section-monitor" class="dynamic-section" style="display: none;">
+                            <div class="form-section-title">Display Specifications</div>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">Screen Size</label>
+                                    <input type="text" class="form-control" placeholder="e.g. 24-inch">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Resolution</label>
+                                    <input type="text" class="form-control" placeholder="e.g. 1920 x 1080">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Panel Type</label>
+                                    <input type="text" class="form-control" placeholder="e.g. IPS, LED">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Storage Specs -->
+                        <div id="section-storage" class="dynamic-section" style="display: none;">
+                            <div class="form-section-title">Storage Specifications</div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Storage Capacity</label>
+                                    <input type="text" class="form-control" placeholder="e.g. 1TB, 500GB">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Drive Type</label>
+                                    <select class="form-select">
+                                        <option>External SSD</option>
+                                        <option>External HDD</option>
+                                        <option>USB Flash Drive</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Technical Details (Generic for others) -->
+                        <div id="section-tech-details" class="dynamic-section" style="display: none;">
+                            <div class="form-section-title">Technical Details</div>
+                            <div class="row g-3">
+                                <div id="div-wattage" class="col-md-4" style="display: none;">
+                                    <label class="form-label">Wattage (W)</label>
+                                    <input type="text" class="form-control" placeholder="e.g. 65W, 30W">
+                                </div>
+                                <div id="div-connector" class="col-md-4" style="display: none;">
+                                    <label class="form-label">Connector Type</label>
+                                    <input type="text" class="form-control" placeholder="e.g. USB-C, HDMI, LAN">
+                                </div>
+                                <div id="div-connectivity" class="col-md-4" style="display: none;">
+                                    <label class="form-label">Connectivity</label>
+                                    <select class="form-select">
+                                        <option>Wired</option>
+                                        <option>Wireless (2.4GHz)</option>
+                                        <option>Bluetooth</option>
+                                        <option>Dual Mode</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Included Peripherals -->
+                        <div id="section-peripherals" class="dynamic-section">
+                            <div class="form-section-title">Included Peripherals / Bundle</div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Mouse Model/SN</label>
+                                    <input type="text" class="form-control" placeholder="Enter if included">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Charger Model/SN</label>
+                                    <input type="text" class="form-control" placeholder="Enter if included">
+                                </div>
+                                <div id="desktop-only-peripherals" style="display: none;" class="col-12 mt-0">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Keyboard Model/SN</label>
+                                            <input type="text" class="form-control" placeholder="Enter if included">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">USP/Hub Model</label>
+                                            <input type="text" class="form-control" placeholder="Enter if included">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status & Purchase -->
+                        <div class="form-section-title">Status & Purchase</div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Purchase Date</label>
+                                <input type="date" class="form-control">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Warranty Expiry</label>
+                                <input type="date" class="form-control">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Initial Status</label>
+                                <select class="form-select">
+                                    <option selected>Available</option>
+                                    <option>Allocated</option>
+                                    <option>Under Repair</option>
+                                    <option>Damaged</option>
+                                    <option>Retired</option>
+                                </select>
+                            </div>
+                            <div class="col-md-8">
+                                <label class="form-label">Vendor / Supplier</label>
+                                <input type="text" class="form-control"
+                                    placeholder="e.g. Amazon, Local IT Vendor, Direct Brand">
+                            </div>
+                        </div>
+
+                        <!-- Notes -->
+                        <div class="mt-4">
+                            <label class="form-label">Notes</label>
+                            <textarea class="form-control" rows="3" placeholder="Any additional details..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0 pt-0 pe-4 pb-4">
+                    <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn-save" onclick="saveAsset()">Save Asset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function saveAsset() {
+            // Mock save functionality
+            const btn = document.querySelector('.btn-save');
+            const originalText = btn.textContent;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                alert('Asset added successfully!');
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addAssetModal'));
+                modal.hide();
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                document.getElementById('addAssetForm').reset();
+            }, 1000);
+        }
+
+        function openDrawer(data) {
+            // Populate Data
+            document.getElementById('d-title').textContent = data.title;
+            document.getElementById('d-serial').textContent = data.serial;
+            document.getElementById('d-specs').textContent = data.specs;
+            document.getElementById('d-os').textContent = data.os;
+            document.getElementById('d-empName').textContent = data.empName;
+            document.getElementById('d-empId').textContent = data.empId;
+            document.getElementById('d-date').textContent = data.date;
+
+            const entityDrawer = document.getElementById('d-entity-drawer');
+            if (data.entity === 'Aascent') {
+                entityDrawer.innerHTML = '<span class="entity-tag tag-aascent">Aascent InfoSolutions</span>';
+            } else if (data.entity === 'Aaroha') {
+                entityDrawer.innerHTML = '<span class="entity-tag tag-aaroha">Aaroha InfoSolutions</span>';
+            } else if (data.entity === 'External') {
+                entityDrawer.innerHTML = '<span class="entity-tag tag-external">Professional / Consultant</span>';
+            } else {
+                entityDrawer.innerHTML = '';
+            }
+
+            // New Fields
+            document.getElementById('d-mouse').textContent = data.mouse || 'N/A';
+            document.getElementById('d-keyboard').textContent = data.keyboard || 'N/A';
+            document.getElementById('d-headphone').textContent = data.headphone || 'N/A';
+            document.getElementById('d-storage').textContent = data.storage || 'N/A';
+            document.getElementById('d-otg').textContent = data.otg || 'N/A';
+            document.getElementById('d-charger').textContent = data.charger || 'N/A';
+            document.getElementById('d-others').textContent = data.others || 'N/A';
+
+            // Advance Warranty UI Logic
+            const warrantyDate = data.warranty || 'N/A';
+            document.getElementById('d-warranty-date').textContent = warrantyDate;
+
+            const progress = document.getElementById('d-warranty-progress');
+            const label = document.getElementById('d-warranty-label');
+            const daysText = document.getElementById('d-warranty-days');
+
+            // Mock calculations for demonstration
+            if (warrantyDate.includes('2025')) {
+                progress.style.width = '85%';
+                progress.style.background = '#F59E0B'; // Orange
+                label.textContent = 'Expiring Soon';
+                label.style.color = '#B45309';
+                daysText.textContent = '42 days remaining';
+            } else if (warrantyDate.includes('2026') || warrantyDate.includes('2027')) {
+                progress.style.width = '100%';
+                progress.style.background = '#10B981'; // Green
+                label.textContent = 'Active';
+                label.style.color = '#059669';
+                daysText.textContent = '300+ days remaining';
+            } else {
+                progress.style.width = '20%';
+                progress.style.background = '#EF4444'; // Red
+                label.textContent = 'Expired';
+                label.style.color = '#B91C1C';
+                daysText.textContent = 'Warranty Over';
+            }
+
+            // Handle Status Badge & Button Text
+            const badgeContainer = document.getElementById('d-status-badge');
+            const actionBtn = document.getElementById('btn-action');
+
+            const secondaryBtn = document.getElementById('btn-secondary');
+            secondaryBtn.style.display = 'none'; // Default hidden
+
+            if (data.status === 'Available') {
+                actionBtn.innerHTML = `<i class="bi bi-person-plus me-2"></i> Assign to Employee`;
+                actionBtn.className = 'btn btn-primary w-100 fw-bold';
+                actionBtn.onclick = () => {
+                    document.getElementById('assign-title').textContent = data.title;
+                    document.getElementById('assign-serial').textContent = `SN: ${data.serial}`;
+                    document.getElementById('assign-mouse-label').textContent = data.mouse !== 'N/A' ? data.mouse : 'Wireless Mouse';
+                    const modal = new bootstrap.Modal(document.getElementById('assignModal'));
+                    modal.show();
+                };
+            } else if (data.status === 'Allocated') {
+                actionBtn.innerHTML = `<i class="bi bi-arrow-left-right me-2"></i> Reassign Asset`;
+                actionBtn.className = 'btn btn-outline-primary w-100 fw-bold';
+                actionBtn.onclick = () => {
+                    document.getElementById('assign-modal-title').textContent = "Reassign Asset";
+                    document.getElementById('assign-title').textContent = data.title;
+                    document.getElementById('assign-serial').textContent = `SN: ${data.serial}`;
+                    document.getElementById('assign-mouse-label').textContent = data.mouse !== 'N/A' ? data.mouse : 'Wireless Mouse';
+                    const modal = new bootstrap.Modal(document.getElementById('assignModal'));
+                    modal.show();
+                };
+
+                secondaryBtn.style.display = 'block';
+                secondaryBtn.innerHTML = `<i class="bi bi-box-arrow-in-down me-2"></i> Deallocate / Return to Stock`;
+                secondaryBtn.onclick = () => {
+                    document.getElementById('confirm-title').textContent = "Confirm Deallocation";
+                    document.getElementById('confirm-message').textContent = `Are you sure you want to deallocate ${data.title}? The asset status will be set back to Available.`;
+                    const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+                    modal.show();
+                };
+            } else if (data.status === 'Pending Ack.') {
+                actionBtn.innerHTML = '<i class="bi bi-envelope-paper me-2"></i> Resend Email';
+                actionBtn.className = 'btn btn-warning w-100 text-white fw-bold';
+            } else if (data.status === 'Under Repair') {
+                actionBtn.innerHTML = '<i class="bi bi-tools me-2"></i> Update Service Status';
+                actionBtn.className = 'btn btn-outline-secondary w-100 fw-bold';
+            } else if (data.status === 'Damaged') {
+                actionBtn.innerHTML = '<i class="bi bi-shield-exclamation me-2"></i> Report Assessment';
+                actionBtn.className = 'btn btn-danger w-100 fw-bold';
+            } else if (data.status === 'Retired') {
+                actionBtn.innerHTML = '<i class="bi bi-trash me-2"></i> Disposal Record';
+                actionBtn.className = 'btn btn-dark w-100 fw-bold';
+            } else {
+                actionBtn.innerHTML = `<i class="bi bi-person-plus me-2"></i> Assign Asset`;
+                actionBtn.className = 'btn btn-primary w-100 fw-bold';
+            }
+
+            // Handle Badge specifically
+            if (data.status === 'Allocated') {
+                badgeContainer.innerHTML = `<span class="badge badge-allocated fs-6">Allocated</span>`;
+            } else if (data.status === 'Available') {
+                badgeContainer.innerHTML = `<span class="badge badge-available fs-6">Available</span>`;
+            } else if (data.status === 'Pending Ack.') {
+                badgeContainer.innerHTML = '<span class="badge badge-waiting fs-6">Pending Acknowledgement</span>';
+            } else if (data.status === 'Under Repair') {
+                badgeContainer.innerHTML = '<span class="badge badge-repair fs-6">Under Repair</span>';
+            } else if (data.status === 'Damaged') {
+                badgeContainer.innerHTML = '<span class="badge badge-damaged fs-6">Damaged</span>';
+            } else if (data.status === 'Retired') {
+                badgeContainer.innerHTML = '<span class="badge badge-retired fs-6">Retired</span>';
+            }
+
+            // Show Drawer
+            document.getElementById('drawer').classList.add('active');
+            document.getElementById('overlay').classList.add('active');
+        }
+
+        function deallocateAsset() {
+            const modalEl = document.getElementById('confirmModal');
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            if (modal) modal.hide();
+
+            closeDrawer();
+            showToast("Asset deallocated successfully. Returning to stock.");
+            setTimeout(() => location.reload(), 1200);
+        }
+
+
+        function closeDrawer() {
+            document.getElementById('drawer').classList.remove('active');
+            document.getElementById('overlay').classList.remove('active');
+        }
+
+        function confirmAssignment() {
+            // Close logic
+            const modalEl = document.getElementById('assignModal');
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            if (modal) modal.hide();
+            closeDrawer();
+
+            showToast("Asset successfully assigned! Allocation email sent.");
+        }
+
+        function filterTable() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const category = document.getElementById('categoryFilter').value;
+            const status = document.getElementById('statusFilter').value;
+            const entity = document.getElementById('entityFilter').value;
+            const rows = document.querySelectorAll('.asset-row');
+
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                const rowCategory = row.getAttribute('data-category');
+                const rowStatus = row.getAttribute('data-status');
+                const rowEntity = row.getAttribute('data-entity');
+
+                const matchesSearch = text.includes(query);
+                const matchesCategory = !category || rowCategory === category;
+                const matchesStatus = !status || rowStatus === status;
+                const matchesEntity = !entity || rowEntity === entity;
+
+                if (matchesSearch && matchesCategory && matchesStatus && matchesEntity) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function copyToClipboard(text, event) {
+            // Stop drawer from opening
+            if (event) event.stopPropagation();
+
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(`Serial ${text} copied to clipboard!`);
+            });
+        }
+        function toggleFormFields() {
+            const category = document.getElementById('assetCategory').value;
+
+            // Map configuration for high-level sections
+            const sectionMap = {
+                'section-computing': ['Laptop', 'Desktop'],
+                'section-mobile': ['Mobile'],
+                'section-monitor': ['Monitor'],
+                'section-storage': ['Storage'],
+                'section-tech-details': ['Peripheral', 'Power', 'Cable'],
+                'section-peripherals': ['Laptop', 'Desktop', 'Mobile'],
+                'desktop-only-peripherals': ['Desktop']
+            };
+
+            // Map configuration for conditional sub-fields in Tech Details
+            const subFieldMap = {
+                'div-wattage': ['Power'],
+                'div-connector': ['Power', 'Cable'],
+                'div-connectivity': ['Peripheral']
+            };
+
+            // Toggle Sections
+            Object.keys(sectionMap).forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = sectionMap[id].includes(category) ? 'block' : 'none';
+            });
+
+            // Toggle Sub-fields
+            Object.keys(subFieldMap).forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = subFieldMap[id].includes(category) ? 'block' : 'none';
+            });
+        }
+
+        function filterByWarranty() {
+            // One-click filter to show only expiring assets
+            const rows = document.querySelectorAll('.asset-row');
+            rows.forEach(row => {
+                if (row.querySelector('.badge-warranty-near')) {
+                    row.style.display = '';
+                    row.classList.add('highlight-warranty');
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            showToast("Showing assets with expiring warranties");
+        }
+
+        // Run once on load to set initial state
+        document.addEventListener('DOMContentLoaded', toggleFormFields);
+
+        function showToast(message) {
+            let toast = document.getElementById('copyToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'copyToast';
+                toast.className = 'copy-toast';
+                document.body.appendChild(toast);
+            }
+            toast.innerHTML = `<i class="bi bi-check-circle-fill text-success"></i> ${message}`;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+    <!-- Assign Asset Modal -->
+    <div class="modal fade" id="assignModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0 px-4 pt-4">
+                    <h5 class="modal-title fw-bold" id="assign-modal-title">Assign Asset</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="d-flex align-items-center mb-4 p-3 bg-light rounded-3 border">
+                        <div class="bg-white rounded p-2 me-3 text-primary shadow-sm">
+                            <i class="bi bi-laptop fs-4" id="assign-icon"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold" id="assign-title">HP Pavillion Power</div>
+                            <div class="small text-muted" id="assign-serial">SN: 5CD7317YGO</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-muted text-uppercase">Select Employee</label>
+                        <select class="form-select">
+                            <option selected disabled>Choose employee...</option>
+                            <option>Yash Vithalani (ARI-14)</option>
+                            <option>Sachin Modh (AI-002)</option>
+                            <option>Nayan Patel (EXT-NP)</option>
+                            <option>New Employee...</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-muted text-uppercase">Handover Checklist</label>
+                        <div class="check-item">
+                            <input class="form-check-input mt-0" type="checkbox" checked>
+                            <span>Original Power Adapter / Charger</span>
+                        </div>
+                        <div class="check-item">
+                            <input class="form-check-input mt-0" type="checkbox" checked>
+                            <span>Laptop Bag / Backpack</span>
+                        </div>
+                        <div class="check-item">
+                            <input class="form-check-input mt-0" type="checkbox" id="check-mouse">
+                            <span id="assign-mouse-label">Wireless Mouse</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-0">
+                        <label class="form-label small fw-bold text-muted text-uppercase">Handover Notes</label>
+                        <textarea class="form-control" rows="2" placeholder="e.g. Minor scratch on lid..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary px-4 fw-bold" onclick="confirmAssignment()">Confirm
+                        Assignment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Action Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 1rem;">
+                <div class="modal-body p-4 text-center">
+                    <div class="text-danger mb-3" style="font-size: 3rem;">
+                        <i class="bi bi-exclamation-octagon"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2" id="confirm-title">Confirm Deallocation</h5>
+                    <p class="text-muted small mb-4" id="confirm-message">Are you sure you want to deallocate this
+                        asset?</p>
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-danger fw-bold" onclick="deallocateAsset()">Yes,
+                            Deallocate</button>
+                        <button type="button" class="btn btn-light fw-bold" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #374151;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .header {
+            background: #8D321F;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .asset-box {
+            background: #f8f9fd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #e5e7eb;
+        }
+
+        .asset-label {
+            color: #6b7280;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .asset-value {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #8D321F;
+            color: white !important;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-top: 20px;
+            box-shadow: 0 4px 12px rgba(141, 50, 31, 0.2);
+        }
+
+        .btn-secondary {
+            display: inline-block;
+            background: #ffffff;
+            color: #4b5563 !important;
+            padding: 10px 25px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-top: 10px;
+            border: 1px solid #d1d5db;
+            font-size: 14px;
+        }
+
+        .report-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px dashed #e5e7eb;
+            text-align: center;
+        }
+
+        .footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #9ca3af;
+            border-top: 1px solid #f3f4f6;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 style="margin:0; font-size: 24px;">Asset Allocation</h1>
+        </div>
+        <div class="content">
+            <p>Hello <strong>{Employee Name}</strong>,</p>
+            <p>A new asset has been assigned to you. Please review the details below and acknowledge receipt to complete
+                the allocation process.</p>
+
+            <div class="asset-box">
+                <div class="asset-label">Asset Type</div>
+                <div class="asset-value">{Asset Title}</div>
+
+                <div class="asset-label">Serial Number</div>
+                <div class="asset-value" style="font-family: monospace;">{Serial Number}</div>
+
+                <div class="asset-label">Specifications</div>
+                <div class="asset-value">{Specs}</div>
+            </div>
+
+            <p>By clicking the button below, you confirm that you have received the asset in good working condition.</p>
+
+            <div style="text-align: center;">
+                <a href="#" class="btn">Confirm Receipt & Accept</a>
+            </div>
+
+            <div class="report-section">
+                <p style="font-size: 13px; color: #6b7280; margin-bottom: 10px;">
+                    Is something missing or damaged? Let us know.
+                </p>
+                <a href="#" class="btn-secondary">Report an Issue</a>
+            </div>
+        </div>
+        <div class="footer">
+            Sent via WorkSphare AI<br>
+            &copy; 2026 WorkSphare AI. All rights reserved.
+        </div>
+    </div>
+</body>
+
+</html>
