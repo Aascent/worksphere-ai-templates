@@ -1329,6 +1329,7 @@
                                     <option value="Peripheral">Peripheral (Mouse/Keyboard/Pad)</option>
                                     <option value="Power">Power (Charger / Adapter)</option>
                                     <option value="Cable">Cable (LAN / HDMI / USB)</option>
+                                    <option value="Storage">Storage (SSD / HDD / Flash)</option>
                                     <option value="Bag">Laptop Bag</option>
                                     <option value="Other">Other</option>
                                 </select>
@@ -1433,6 +1434,26 @@
                                 <div class="col-md-4">
                                     <label class="form-label">Panel Type</label>
                                     <input type="text" class="form-control" placeholder="e.g. IPS, LED">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Storage Specs -->
+                        <div id="section-storage" class="dynamic-section" style="display: none;">
+                            <div class="form-section-title">Storage Specifications</div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Storage Capacity</label>
+                                    <input type="text" class="form-control" placeholder="e.g. 1TB, 500GB">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Drive Type</label>
+                                    <select class="form-select">
+                                        <option>External SSD</option>
+                                        <option>External HDD</option>
+                                        <option>USB Flash Drive</option>
+                                        <option>Other</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -1745,40 +1766,36 @@
         }
         function toggleFormFields() {
             const category = document.getElementById('assetCategory').value;
-            const computing = document.getElementById('section-computing');
-            const mobile = document.getElementById('section-mobile');
-            const monitor = document.getElementById('section-monitor');
-            const techDetails = document.getElementById('section-tech-details');
-            const peripherals = document.getElementById('section-peripherals');
-            const desktopOnly = document.getElementById('desktop-only-peripherals');
 
-            const divWattage = document.getElementById('div-wattage');
-            const divConnector = document.getElementById('div-connector');
-            const divConnectivity = document.getElementById('div-connectivity');
+            // Map configuration for high-level sections
+            const sectionMap = {
+                'section-computing': ['Laptop', 'Desktop'],
+                'section-mobile': ['Mobile'],
+                'section-monitor': ['Monitor'],
+                'section-storage': ['Storage'],
+                'section-tech-details': ['Peripheral', 'Power', 'Cable'],
+                'section-peripherals': ['Laptop', 'Desktop', 'Mobile'],
+                'desktop-only-peripherals': ['Desktop']
+            };
 
-            // Default State
-            [computing, mobile, monitor, techDetails, peripherals, desktopOnly, divWattage, divConnector, divConnectivity].forEach(el => el.style.display = 'none');
+            // Map configuration for conditional sub-fields in Tech Details
+            const subFieldMap = {
+                'div-wattage': ['Power'],
+                'div-connector': ['Power', 'Cable'],
+                'div-connectivity': ['Peripheral']
+            };
 
-            if (category === 'Laptop' || category === 'Desktop') {
-                computing.style.display = 'block';
-                peripherals.style.display = 'block';
-                if (category === 'Desktop') desktopOnly.style.display = 'block';
-            } else if (category === 'Mobile') {
-                mobile.style.display = 'block';
-                peripherals.style.display = 'block';
-            } else if (category === 'Monitor') {
-                monitor.style.display = 'block';
-            } else if (category === 'Peripheral') {
-                techDetails.style.display = 'block';
-                divConnectivity.style.display = 'block';
-            } else if (category === 'Power') {
-                techDetails.style.display = 'block';
-                divWattage.style.display = 'block';
-                divConnector.style.display = 'block';
-            } else if (category === 'Cable') {
-                techDetails.style.display = 'block';
-                divConnector.style.display = 'block';
-            }
+            // Toggle Sections
+            Object.keys(sectionMap).forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = sectionMap[id].includes(category) ? 'block' : 'none';
+            });
+
+            // Toggle Sub-fields
+            Object.keys(subFieldMap).forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = subFieldMap[id].includes(category) ? 'block' : 'none';
+            });
         }
 
         function filterByWarranty() {
