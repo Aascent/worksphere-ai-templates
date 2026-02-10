@@ -326,47 +326,76 @@
             font-size: 0.75rem;
         }
 
-        .badge-allocated {
-            background: var(--status-approved-bg);
-            color: var(--status-approved-text);
+        .badge-waiting {
+            background: #FFFBEB;
+            color: #B45309;
             padding: 0.5rem 1rem;
             border-radius: 50px;
+            border: 1px solid #FDE68A;
+        }
+
+        .badge-allocated {
+            background: #EFF6FF;
+            color: #2563EB;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: 1px solid #BFDBFE;
         }
 
         .badge-available {
-            background: var(--status-pending-bg);
-            color: var(--status-pending-text);
+            background: #F0FDF4;
+            color: #16A34A;
             padding: 0.5rem 1rem;
             border-radius: 50px;
-        }
-
-        .badge-waiting {
-            background: var(--status-waiting-bg);
-            color: var(--status-waiting-text);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
+            border: 1px solid #BBF7D0;
         }
 
         .badge-repair {
-            background: var(--status-repair-bg);
-            color: white;
+            background: #EEF2FF;
+            color: #4F46E5;
             padding: 0.5rem 1rem;
             border-radius: 50px;
+            border: 1px solid #C7D2FE;
         }
 
         .badge-damaged {
-            background: var(--status-damaged-bg);
-            color: white;
+            background: #FEF2F2;
+            color: #DC2626;
             padding: 0.5rem 1rem;
             border-radius: 50px;
+            border: 1px solid #FECACA;
         }
 
         .badge-retired {
-            background: var(--status-retired-bg);
-            color: white;
+            background: #F8FAFC;
+            color: #475569;
             padding: 0.5rem 1rem;
             border-radius: 50px;
+            border: 1px solid #E2E8F0;
         }
+
+
+        /* --- WhatsApp Ticks --- */
+        .wa-tick {
+            font-size: 1.25rem;
+            vertical-align: middle;
+            line-height: 1;
+        }
+
+        .tick-grey {
+            color: #94a3b8;
+        }
+
+        .tick-blue {
+            color: #3B82F6;
+        }
+
+        .wa-tick-container {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
 
         .badge-date {
             background: #FFFFFF;
@@ -929,7 +958,9 @@
                         <td>
                             <div class="d-flex align-items-center gap-2">
                                 <span class="badge badge-allocated">Allocated</span>
-                                <i class="bi bi-check-lg text-success fw-bold"></i>
+                                <div class="wa-tick-container">
+                                    <i class="bi bi-check-all wa-tick tick-blue" title="Verified by Employee"></i>
+                                </div>
                             </div>
                         </td>
                         <td>
@@ -990,7 +1021,7 @@
                         <td>
                             <div class="d-flex align-items-center gap-2">
                                 <span class="badge badge-waiting">Pending Ack.</span>
-                                <i class="bi bi-envelope-at text-warning fw-bold"></i>
+                                <i class="bi bi-check wa-tick tick-grey" title="Email Sent"></i>
                             </div>
                         </td>
                         <td>
@@ -1048,7 +1079,9 @@
                         <td>
                             <div class="d-flex align-items-center gap-2">
                                 <span class="badge badge-allocated">Allocated</span>
-                                <i class="bi bi-check-lg text-success fw-bold"></i>
+                                <div class="wa-tick-container">
+                                    <i class="bi bi-check-all wa-tick tick-blue" title="Verified by Employee"></i>
+                                </div>
                             </div>
                         </td>
                         <td>
@@ -1101,8 +1134,12 @@
                                     class="bi bi-copy small opacity-50"></i></span>
                         </td>
                         <td>
-                            <span class="badge badge-allocated">Allocated</span>
-                            <i class="bi bi-check-all text-success ms-1" title="Confirmed by Employee"></i>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge badge-allocated">Allocated</span>
+                                <div class="wa-tick-container">
+                                    <i class="bi bi-check-all wa-tick tick-blue" title="Verified by Employee"></i>
+                                </div>
+                            </div>
                         </td>
                         <td>
                             <div class="d-flex align-items-center">
@@ -1166,6 +1203,162 @@
                             </div>
                         </td>
                         <td class="text-end pe-4 text-muted small">1 week ago</td>
+                    </tr>
+
+                    <tr class="asset-row" data-category="Laptop" data-status="Pending Ack." data-entity="Aascent"
+                        onclick="openDrawer({
+                        title: 'Apple MacBook Pro M3',
+                        status: 'Pending Ack.',
+                        serial: 'SC02FGJ98L0',
+                        empName: 'Priyanka Sharma',
+                        empId: 'AI-104',
+                        entity: 'Aascent',
+                        specs: 'Apple M3 Pro, 18GB RAM',
+                        os: 'macOS Sequoia',
+                        date: '10-02-2026',
+                        warranty: '10-02-2029',
+                        mouse: 'Apple Magic Mouse',
+                        charger: '96W USB-C Adapter',
+                        others: 'Sleevecase'
+                    })">
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded p-2 me-3 text-primary"><i class="bi bi-laptop fs-5"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark">MacBook Pro M3</div>
+                                    <div class="specs-snippet">M3 Pro • 18GB RAM</div>
+                                    <div class="small text-muted mt-1" style="font-size: 0.7rem;">ID: AST-912</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="font-monospace text-muted">
+                            <span class="badge-date">10/02/2026</span>
+                        </td>
+                        <td class="font-monospace small text-muted">
+                            <span class="serial-tag" onclick="copyToClipboard('SC02FGJ98L0', event)">SC02FGJ98L0 <i
+                                    class="bi bi-copy small opacity-50"></i></span>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge badge-waiting">Pending Ack.</span>
+                                <i class="bi bi-check wa-tick tick-grey" title="Email Sent"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle avatar-aascent me-3">PS</div>
+                                <div>
+                                    <div class="fw-bold text-dark small" style="line-height: 1.2;">Priyanka Sharma</div>
+                                    <div class="d-flex align-items-center gap-2 mt-1">
+                                        <span class="entity-tag tag-aascent">Aascent</span>
+                                        <span class="text-muted" style="font-size: 0.65rem;"><span class="fw-bold"
+                                                style="color: var(--primary);">AI</span>-104</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-end pe-4 text-muted small">Just now</td>
+                    </tr>
+
+                    <tr class="asset-row" data-category="Desktop" data-status="Allocated" data-entity="Aascent" onclick="openDrawer({
+                        title: 'Dell OptiPlex 7000',
+                        status: 'Allocated',
+                        serial: 'CZ098L12X',
+                        empName: 'Rahul Mehta',
+                        empId: 'AI-201',
+                        entity: 'Aascent',
+                        specs: 'Intel Core i7-12700, 32GB RAM',
+                        os: 'Windows 11 Pro',
+                        date: '05-01-2024',
+                        keyboard: 'Dell KB216 Keyboard',
+                        mouse: 'Dell MS116 Mouse',
+                        others: '2x 27-inch Dell Monitors'
+                    })">
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded p-2 me-3 text-primary"><i class="bi bi-display fs-5"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark">Dell OptiPlex 7000</div>
+                                    <div class="specs-snippet">i7-12700 • 32GB RAM</div>
+                                    <div class="small text-muted mt-1" style="font-size: 0.7rem;">ID: AST-605</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="font-monospace text-muted">
+                            <span class="badge-date">05/01/2024</span>
+                        </td>
+                        <td class="font-monospace small text-muted">
+                            <span class="serial-tag" onclick="copyToClipboard('CZ098L12X', event)">CZ098L12X <i
+                                    class="bi bi-copy small opacity-50"></i></span>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge badge-allocated">Allocated</span>
+                                <div class="wa-tick-container">
+                                    <i class="bi bi-check-all wa-tick tick-blue" title="Verified by Employee"></i>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle avatar-aascent me-3">RM</div>
+                                <div>
+                                    <div class="fw-bold text-dark small" style="line-height: 1.2;">Rahul Mehta</div>
+                                    <div class="d-flex align-items-center gap-2 mt-1">
+                                        <span class="entity-tag tag-aascent">Aascent</span>
+                                        <span class="text-muted" style="font-size: 0.65rem;"><span class="fw-bold"
+                                                style="color: var(--primary);">AI</span>-201</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-end pe-4 text-muted small">1 hour ago</td>
+                    </tr>
+
+                    <tr class="asset-row" data-category="Peripheral" data-status="Retired" data-entity="None" onclick="openDrawer({
+                        title: 'Dell 24 Monitor',
+                        status: 'Retired',
+                        serial: 'CN-0FY9V2-74445',
+                        empName: 'N/A',
+                        empId: 'N/A',
+                        specs: '24-inch FHD, 60Hz',
+                        date: '15-05-2018',
+                        others: 'HDMI Cable, Stand'
+                    })">
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded p-2 me-3 text-secondary"><i class="bi bi-display fs-5"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark">Dell 24 Monitor</div>
+                                    <div class="specs-snippet">P2419H • 24" FHD</div>
+                                    <div class="small text-muted mt-1" style="font-size: 0.7rem;">ID: AST-009</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="font-monospace text-muted">
+                            <span class="badge-date">15/05/2018</span>
+                        </td>
+                        <td class="font-monospace small text-muted">
+                            <span class="serial-tag" onclick="copyToClipboard('CN-0FY9V2-74445', event)">CN-0FY9V2-74445
+                                <i class="bi bi-copy small opacity-50"></i></span>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge badge-retired">Retired</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle avatar-unassigned me-3">
+                                    <i class="bi bi-archive" style="font-size: 0.8rem;"></i>
+                                </div>
+                                <div class="fw-bold text-muted small">Scrapped</div>
+                            </div>
+                        </td>
+                        <td class="text-end pe-4 text-muted small">6 months ago</td>
                     </tr>
                 </tbody>
             </table>
@@ -1687,7 +1880,7 @@
 
             // Handle Badge specifically
             if (data.status === 'Allocated') {
-                badgeContainer.innerHTML = `<span class="badge badge-allocated fs-6">Allocated</span> <i class="bi bi-patch-check-fill text-white ms-1" style="font-size: 0.8rem;"></i>`;
+                badgeContainer.innerHTML = `<span class="badge badge-allocated fs-6">Allocated</span>`;
             } else if (data.status === 'Available') {
                 badgeContainer.innerHTML = `<span class="badge badge-available fs-6">Available</span>`;
             } else if (data.status === 'Pending Ack.') {

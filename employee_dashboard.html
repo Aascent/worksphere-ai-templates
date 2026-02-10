@@ -307,6 +307,46 @@
             background: #FEE2E2;
         }
 
+        /* --- Elite Status Badges --- */
+        .badge-status {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .status-waiting {
+            background: #FFFBEB;
+            color: #B45309;
+            border: 1px solid #FDE68A;
+        }
+
+        .status-allocated {
+            background: #EFF6FF;
+            color: #2563EB;
+            border: 1px solid #BFDBFE;
+        }
+
+
+        /* --- WhatsApp Ticks --- */
+        .wa-tick-container {
+            display: inline-flex;
+            align-items: center;
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+
+        .tick-grey {
+            color: #94a3b8;
+        }
+
+        .tick-blue {
+            color: #3B82F6;
+        }
+
+
         /* --- Asset Drawer --- */
         .drawer-overlay {
             position: fixed;
@@ -464,8 +504,12 @@
                         <div class="asset-icon-box" style="background: #E0F2FE; color: #0EA5E9;">
                             <i class="bi bi-pc-display"></i>
                         </div>
-                        <span class="badge rounded-pill bg-success bg-opacity-10 text-success fw-bold p-2 px-3"
-                            style="font-size: 0.7rem;">ALLOCATED</span>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge-status status-allocated">Allocated</span>
+                            <div class="wa-tick-container">
+                                <i class="bi bi-check-all tick-blue" title="Verified Record"></i>
+                            </div>
+                        </div>
                     </div>
                     <h5 class="fw-bold mb-1">Mac Mini Box</h5>
                     <p class="text-muted small mb-3">Apple M1 • 8GB RAM • 256GB SSD</p>
@@ -489,8 +533,10 @@
                         <div class="asset-icon-box" style="background: #FEF3C7; color: #D97706;">
                             <i class="bi bi-keyboard"></i>
                         </div>
-                        <span class="badge rounded-pill bg-warning bg-opacity-10 text-warning fw-bold p-2 px-3"
-                            style="font-size: 0.7rem;">PENDING ACK.</span>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge-status status-waiting">Pending Ack.</span>
+                            <i class="bi bi-check tick-grey" title="Notification Sent"></i>
+                        </div>
                     </div>
                     <h5 class="fw-bold mb-1">Magic Keyboard</h5>
                     <p class="text-muted small mb-3">Apple Wireless (Silver Edition)</p>
@@ -513,8 +559,12 @@
                         <div class="asset-icon-box" style="background: #F1F5F9; color: #64748B;">
                             <i class="bi bi-device-hdd"></i>
                         </div>
-                        <span class="badge rounded-pill bg-success bg-opacity-10 text-success fw-bold p-2 px-3"
-                            style="font-size: 0.7rem;">ALLOCATED</span>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge-status status-allocated">Allocated</span>
+                            <div class="wa-tick-container">
+                                <i class="bi bi-check-all tick-blue" title="Verified Record"></i>
+                            </div>
+                        </div>
                     </div>
                     <h5 class="fw-bold mb-1">Samsung T7 SSD</h5>
                     <p class="text-muted small mb-3">500GB Portable Storage</p>
