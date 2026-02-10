@@ -272,12 +272,11 @@
             font-size: 0.75rem;
             background: #f1f5f9;
             padding: 4px 10px;
-            border-radius: 4px;
+            border-radius: 6px;
             color: #475569;
             border: 1px solid #e2e8f0;
-            cursor: copy;
+            cursor: pointer;
             transition: all 0.2s;
-            position: relative;
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -286,19 +285,7 @@
         .serial-tag:hover {
             background: #e2e8f0;
             color: var(--primary);
-            border-color: var(--primary);
-        }
-
-        .serial-tag::after {
-            content: '\F2E3';
-            /* Bootstrap Icon: bi-clipboard */
-            font-family: "bootstrap-icons";
-            font-size: 0.7rem;
-            opacity: 0.4;
-        }
-
-        .serial-tag:hover::after {
-            opacity: 1;
+            transform: translateY(-1px);
         }
 
         .copy-toast {
@@ -936,8 +923,8 @@
                             <span class="badge-date">16/07/2020</span>
                         </td>
                         <td class="font-monospace small text-muted">
-                            <span class="serial-tag" onclick="copyToClipboard('CND026CQNP', event)">CND026CQNP<i
-                                    class="bi bi-chevron-down ms-1 opacity-25"></i></span>
+                            <span class="serial-tag" onclick="copyToClipboard('CND026CQNP', event)">CND026CQNP <i
+                                    class="bi bi-copy small opacity-50"></i></span>
                         </td>
                         <td>
                             <div class="d-flex align-items-center gap-2">
@@ -997,8 +984,8 @@
                             </div>
                         </td>
                         <td class="font-monospace small text-muted">
-                            <span class="serial-tag" onclick="copyToClipboard('4G2LYR3', event)">4G2LYR3<i
-                                    class="bi bi-chevron-down ms-1 opacity-25"></i></span>
+                            <span class="serial-tag" onclick="copyToClipboard('4G2LYR3', event)">4G2LYR3 <i
+                                    class="bi bi-copy small opacity-50"></i></span>
                         </td>
                         <td>
                             <div class="d-flex align-items-center gap-2">
@@ -1056,8 +1043,8 @@
                             <span class="badge-date">18/04/2023</span>
                         </td>
                         <td class="font-monospace small text-muted">
-                            <span class="serial-tag" onclick="copyToClipboard('C07G1LGQ6NV', event)">C07G1LGQ6NV<i
-                                    class="bi bi-chevron-down ms-1 opacity-25"></i></span>
+                            <span class="serial-tag" onclick="copyToClipboard('C07G1LGQ6NV', event)">C07G1LGQ6NV <i
+                                    class="bi bi-copy small opacity-50"></i></span>
                         </td>
                         <td>
                             <div class="d-flex align-items-center gap-2">
